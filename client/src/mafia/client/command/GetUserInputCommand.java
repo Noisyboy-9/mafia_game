@@ -2,10 +2,10 @@ package mafia.client.command;
 
 import java.util.Scanner;
 
-public class UserInputGetter extends Command {
+public class GetUserInputCommand extends Command {
     private final String question;
 
-    public UserInputGetter(String commandString) {
+    public GetUserInputCommand(String commandString) {
         super(commandString);
         this.question = commandString.split("//s+")[1];
     }

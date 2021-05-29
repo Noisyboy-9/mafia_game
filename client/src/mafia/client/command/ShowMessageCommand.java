@@ -1,9 +1,9 @@
 package mafia.client.command;
 
-public class MesageShower extends Command {
+public class ShowMessageCommand extends Command {
     private final String message;
 
-    public MesageShower(String commandString) {
+    public ShowMessageCommand(String commandString) {
         super(commandString);
         this.message = commandString.split("//s+")[1];
     }
