@@ -1,0 +1,9 @@
+# Intellij settings
+.idea
+
+# out folder
+out
+
+# compiled java class files
+*.class
+
