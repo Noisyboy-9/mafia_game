@@ -1,14 +1,12 @@
 package mafia.client.command;
 
-public abstract class Command {
-    private String[] tokens = null;
+import java.io.Serializable;
+
+public abstract class Command implements Serializable {
+    protected final String[] tokens;
 
     public Command(String commandString) {
-        this.tokens = commandString.split("//s+");
-    }
-
-    public String[] getTokens() {
-        return tokens;
+        this.tokens = commandString.split(" ");
     }
 
     public abstract void handle();
