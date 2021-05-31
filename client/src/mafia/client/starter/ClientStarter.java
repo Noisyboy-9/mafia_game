@@ -15,6 +15,8 @@ import java.util.Scanner;
 public class ClientStarter {
     private String gamePort;
     private Socket socket = null;
+    private ObjectOutputStream request;
+    private ObjectInputStream response;
 
     /**
      * Instantiates a new Client starter.
@@ -26,27 +28,18 @@ public class ClientStarter {
     }
 
     private void setSocket() {
-        try (Socket socket = new Socket("127.0.0.1", Integer.parseInt(this.gamePort))) {
-            this.socket = socket;
+        try {
+            this.socket = new Socket("127.0.0.1", Integer.parseInt(this.gamePort));
+            this.request = new ObjectOutputStream(this.socket.getOutputStream());
+            this.response = new ObjectInputStream(this.socket.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
 
-    private void askForReady() {
-        System.out.println("please type READY as soon as you ready...");
-        Scanner scanner = new Scanner(System.in);
-
-//        getting all inputs and ignoring ones that are not READY
-        String input = scanner.nextLine();
-        while (!input.equals("READY")) {
-            input = scanner.nextLine();
-        }
-    }
-
     private void getInputPort() {
-        System.out.print("please input game port: ");
+        System.out.print("When you are ready, please input game port: ");
         Scanner scanner = new Scanner(System.in);
         this.gamePort = scanner.nextLine();
     }
@@ -66,12 +59,12 @@ public class ClientStarter {
             username = this.getInputUsername();
         }
 
-        this.askForReady();
         this.startClientManager();
     }
 
     private void startClientManager() {
-        new ClientManager(this.socket).handleServerCommand();
+        new ClientManager(this.response, this.request).handleServerCommands();
+
 
 //        client work is finished
         new ClientCloser().close(socket);
@@ -79,10 +72,7 @@ public class ClientStarter {
 
     private boolean usernameAlreadyExist(String username) {
         try {
-            ObjectInputStream response = new ObjectInputStream(this.socket.getInputStream());
-            ObjectOutputStream request = new ObjectOutputStream(this.socket.getOutputStream());
-
-            request.writeObject(username);
+            this.request.writeObject(username);
             return (Boolean) response.readObject();
         } catch (IOException | ClassNotFoundException ioException) {
             ioException.printStackTrace();
