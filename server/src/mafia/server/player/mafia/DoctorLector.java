@@ -2,8 +2,8 @@ package mafia.server.player.mafia;
 
 import mafia.server.player.Player;
 import mafia.server.player.mafia.abstacts.Mafia;
-import mafia.server.player.mafia.traits.CanSeeAllMafiasTrait;
-import mafia.server.player.mafia.traits.CanSelectPlayerTrait;
+import mafia.server.player.traits.CanSeeAllMafiasTrait;
+import mafia.server.player.traits.CanSelectPlayerTrait;
 import mafia.server.state.GameState;
 import mafia.server.workers.PlayerWorker;
 

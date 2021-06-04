@@ -1,7 +1,7 @@
 package mafia.server.player.mafia.abstacts;
 
 import mafia.server.player.Player;
-import mafia.server.player.citizen.Citizen;
+import mafia.server.player.citizen.abstracts.Citizen;
 
 /**
  * Mafia role of the game.
