@@ -7,7 +7,16 @@ import mafia.server.workers.PlayerWorker;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+/**
+ * The interface Can vote for kill target trait.
+ */
 public interface CanVoteForKillTargetTrait extends CanSeeAllPlayersTrait, CanSelectPlayerTrait {
+    /**
+     * Vote for citizen to kill player worker.
+     *
+     * @param playerWorker the player worker
+     * @return the player worker
+     */
     default PlayerWorker voteForCitizenToKill(PlayerWorker playerWorker) {
         this.showAllPlayersToClient(playerWorker);
         String killTargetUsername = this.getPlayerUsername(playerWorker);

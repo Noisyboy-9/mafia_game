@@ -8,7 +8,15 @@ import mafia.server.workers.PlayerWorker;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+/**
+ * The interface Can see all mafias trait.
+ */
 public interface CanSeeAllMafiasTrait {
+    /**
+     * Show all mafias to client.
+     *
+     * @param playerWorker the player worker
+     */
     default void showAllMafiasToClient(PlayerWorker playerWorker) {
         ObjectOutputStream response = playerWorker.getResponse();
 
