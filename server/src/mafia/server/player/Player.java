@@ -50,8 +50,6 @@ public abstract class Player {
 
     /**
      * Sets server admin.
-     *
-     * @param serverAdmin the server admin
      */
     public void promoteToServerAdmin() {
         this.isServerAdmin = true;
