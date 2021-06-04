@@ -1,4 +1,4 @@
-package mafia.server.player.mafia.traits;
+package mafia.server.player.traits;
 
 import mafia.server.workers.PlayerWorker;
 
