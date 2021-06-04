@@ -11,7 +11,7 @@ public abstract class Player {
     }
 
     public boolean haveSpeakPermission() {
-        return speakPermission;
+        return this.speakPermission;
     }
 
     public boolean isServerAdmin() {
@@ -19,11 +19,11 @@ public abstract class Player {
     }
 
     public void setServerAdmin(boolean serverAdmin) {
-        isServerAdmin = serverAdmin;
+        this.isServerAdmin = serverAdmin;
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(int id) {
@@ -34,7 +34,7 @@ public abstract class Player {
         return this.isKilled;
     }
 
-    public void setKilled(boolean killed) {
-        isKilled = killed;
+    public void kill(boolean killed) {
+        this.isKilled = killed;
     }
 }
