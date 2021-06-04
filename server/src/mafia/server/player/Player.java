@@ -1,5 +1,7 @@
 package mafia.server.player;
 
+import mafia.server.player.mafia.abstacts.Mafia;
+
 public abstract class Player {
     private boolean speakPermission;
     private int id;
@@ -8,6 +10,11 @@ public abstract class Player {
 
     public void setSpeakPermission(boolean speakPermission) {
         this.speakPermission = speakPermission;
+    }
+
+
+    public boolean isMafia() {
+        return this instanceof Mafia;
     }
 
     public boolean haveSpeakPermission() {
@@ -36,5 +43,11 @@ public abstract class Player {
 
     public void kill() {
         this.isKilled = true;
+    }
+
+    public void revive() {
+        if (this.isKilled) {
+            this.isKilled = false;
+        }
     }
 }
