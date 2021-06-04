@@ -34,7 +34,7 @@ public abstract class Player {
         return this.isKilled;
     }
 
-    public void kill(boolean killed) {
-        this.isKilled = killed;
+    public void kill() {
+        this.isKilled = true;
     }
 }
