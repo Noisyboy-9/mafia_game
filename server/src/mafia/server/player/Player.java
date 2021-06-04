@@ -12,22 +12,19 @@ public abstract class Player {
     private boolean isServerAdmin;
 
     /**
-     * Sets speak permission.
+     * mute player so it can't speak in the chat for the next hand.
      *
      * @param speakPermission the speak permission
      */
-    public void setSpeakPermission(boolean speakPermission) {
-        this.speakPermission = speakPermission;
+    public void mute() {
+        this.speakPermission = false;
     }
 
-
     /**
-     * Check if player is mafia.
-     *
-     * @return the boolean
+     * Unmute player so it can talk in the chat.
      */
-    public boolean isMafia() {
-        return this instanceof Mafia;
+    public void unmute() {
+        this.speakPermission = true;
     }
 
     /**
@@ -38,6 +35,16 @@ public abstract class Player {
     public boolean haveSpeakPermission() {
         return this.speakPermission;
     }
+
+    /**
+     * Check if player is mafia.
+     *
+     * @return the boolean
+     */
+    public boolean isMafia() {
+        return this instanceof Mafia;
+    }
+
 
     /**
      * Is the current player server admin.
