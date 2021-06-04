@@ -7,7 +7,7 @@ import mafia.server.player.citizen.Citizen;
  * Mafia role of the game.
  */
 public abstract class Mafia extends Player {
-    private boolean isLeader = false;
+    protected boolean isLeader = false;
 
     /**
      * Select citizen to kill.
