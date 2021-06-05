@@ -1,11 +1,12 @@
 package mafia.server.GameRoll;
 
-import mafia.server.GameRoll.mafia.abstacts.Mafia;
+import mafia.server.GameRoll.traits.CanKnowItsExactRollTrait;
+import mafia.server.GameRoll.traits.CanParticipateInPollTrait;
 
 /**
  * The abstract type player in mafia game.
  */
-public abstract class GameRoll {
+public abstract class GameRoll implements CanKnowItsExactRollTrait, CanParticipateInPollTrait {
     private boolean speakPermission;
     private int id;
     private boolean isKilled;
@@ -34,15 +35,6 @@ public abstract class GameRoll {
      */
     public boolean haveSpeakPermission() {
         return this.speakPermission;
-    }
-
-    /**
-     * Check if player is mafia.
-     *
-     * @return the boolean
-     */
-    public boolean isMafia() {
-        return this instanceof Mafia;
     }
 
 

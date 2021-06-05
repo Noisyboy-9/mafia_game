@@ -3,12 +3,14 @@ package mafia.server.GameRoll.mafia;
 import mafia.server.GameRoll.mafia.abstacts.Mafia;
 import mafia.server.GameRoll.traits.CanSeeAllMafiasTrait;
 import mafia.server.GameRoll.traits.CanSelectMafiaTrait;
+import mafia.server.GameRoll.traits.CanVoteForKillTargetTrait;
 import mafia.server.workers.PlayerWorker;
 
 /**
  * The role DoctorLector in mafia game.
  */
-public class DoctorLector extends Mafia implements CanSeeAllMafiasTrait, CanSelectMafiaTrait {
+public class DoctorLector extends Mafia implements CanVoteForKillTargetTrait, CanSeeAllMafiasTrait, CanSelectMafiaTrait {
+
     private boolean hasCuredHimself = false;
 
     /**
