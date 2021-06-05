@@ -14,8 +14,8 @@ import java.util.Objects;
  */
 public class GameState {
     private static GameState singletonInstance;
-    private final ArrayList<PlayerWorker> alivePlayers = new ArrayList<>();
-    private final ArrayList<PlayerWorker> deadPlayers = new ArrayList<>();
+    private final ArrayList<PlayerWorker> alivePlayers;
+    private final ArrayList<PlayerWorker> deadPlayers;
 
     /**
      * Gets singleton instance.
@@ -146,27 +146,6 @@ public class GameState {
         return builder.toString();
     }
 
-    private int countKilledCitizens() {
-        int counter = 0;
-
-        for (PlayerWorker playerWorker : this.deadPlayers) {
-            if (playerWorker.getGameRoll().isCitizen()) counter++;
-        }
-
-        return counter;
-    }
-
-    private int countKilledMafias() {
-        int counter = 0;
-
-        for (PlayerWorker playerWorker : this.deadPlayers) {
-            if (playerWorker.getGameRoll().isMafia()) counter++;
-        }
-
-        return counter;
-    }
-
-
     /**
      * Add player.
      *
@@ -194,6 +173,31 @@ public class GameState {
 
         this.alivePlayers.remove(killTarget);
         this.deadPlayers.add(killTarget);
+    }
+
+    private int countKilledCitizens() {
+        int counter = 0;
+
+        for (PlayerWorker playerWorker : this.deadPlayers) {
+            if (playerWorker.getGameRoll().isCitizen()) counter++;
+        }
+
+        return counter;
+    }
+
+    private int countKilledMafias() {
+        int counter = 0;
+
+        for (PlayerWorker playerWorker : this.deadPlayers) {
+            if (playerWorker.getGameRoll().isMafia()) counter++;
+        }
+
+        return counter;
+    }
+
+    private GameState() {
+        this.alivePlayers = new ArrayList<>();
+        this.deadPlayers = new ArrayList<>();
     }
 
 

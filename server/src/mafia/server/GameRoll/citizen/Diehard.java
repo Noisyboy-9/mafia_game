@@ -17,14 +17,6 @@ public class Diehard extends Citizen {
     private boolean hasArmor;
 
     /**
-     * Instantiates a new Diehard.
-     */
-    public Diehard() {
-        this.remainingReportCount = 3;
-        this.hasArmor = true;
-    }
-
-    /**
      * Ask for game report boolean.
      *
      * @param dieHard the die hard
@@ -81,5 +73,13 @@ public class Diehard extends Citizen {
      */
     public void removeArmor() {
         this.hasArmor = false;
+    }
+
+    /**
+     * Instantiates a new Diehard.
+     */
+    public Diehard() {
+        this.remainingReportCount = 3;
+        this.hasArmor = true;
     }
 }

@@ -6,6 +6,11 @@ package mafia.server.commands;
 public class ShowMessageCommand implements Command {
     private final String message;
 
+    @Override
+    public String toString() {
+        return "showMessage" + " " + this.message;
+    }
+
     /**
      * Instantiates a new Show message command.
      *
@@ -13,10 +18,5 @@ public class ShowMessageCommand implements Command {
      */
     public ShowMessageCommand(String message) {
         this.message = message;
-    }
-
-    @Override
-    public String toString() {
-        return "showMessage" + " " + this.message;
     }
 }
