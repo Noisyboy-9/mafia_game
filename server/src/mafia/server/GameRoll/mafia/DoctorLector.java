@@ -1,10 +1,8 @@
 package mafia.server.GameRoll.mafia;
 
-import mafia.server.GameRoll.GameRoll;
 import mafia.server.GameRoll.mafia.abstacts.Mafia;
 import mafia.server.GameRoll.traits.CanSeeAllMafiasTrait;
 import mafia.server.GameRoll.traits.CanSelectPlayerTrait;
-import mafia.server.state.GameState;
 import mafia.server.workers.PlayerWorker;
 
 /**
@@ -20,27 +18,24 @@ public class DoctorLector extends Mafia implements CanSeeAllMafiasTrait, CanSele
      */
     public void selectMafiaToCure(PlayerWorker doctorLector) {
         this.showAllMafiasToClient(doctorLector);
-        String cureTargetUsername = this.getPlayerUsername(doctorLector);
-        GameRoll cureTarget = GameState.getPlayerWorkerByUsername(cureTargetUsername).getPlayer();
+        PlayerWorker cureTarget = this.getSelectedPlayer(doctorLector);
 
-        while (!cureTarget.isMafia()) {
+        while (!cureTarget.getGameRoll().isMafia()) {
             this.showAllMafiasToClient(doctorLector);
-            cureTargetUsername = this.getPlayerUsername(doctorLector);
-            cureTarget = GameState.getPlayerWorkerByUsername(cureTargetUsername).getPlayer();
+            cureTarget = this.getSelectedPlayer(doctorLector);
         }
 
-        while (doctorLector.getUsername().equals(cureTargetUsername) && this.hasCuredHimself) {
+        while (doctorLector.getUsername().equals(cureTarget.getUsername()) && this.hasCuredHimself) {
 //            doctor lector has cured himself once in the past can not cure himself again.
             this.showAllMafiasToClient(doctorLector);
-            cureTargetUsername = this.getPlayerUsername(doctorLector);
-            cureTarget = GameState.getPlayerWorkerByUsername(cureTargetUsername).getPlayer();
+            cureTarget = this.getSelectedPlayer(doctorLector);
         }
 
 
-        if (doctorLector.getUsername().equals(cureTargetUsername)) {
+        if (doctorLector.getUsername().equals(cureTarget.getUsername())) {
             this.hasCuredHimself = true;
         } else {
-            cureTarget.revive();
+            cureTarget.getGameRoll().revive();
         }
     }
 }

@@ -1,10 +1,9 @@
 package mafia.server.GameRoll.citizen;
 
-import mafia.server.commands.ShowMessageCommand;
 import mafia.server.GameRoll.citizen.abstracts.Citizen;
 import mafia.server.GameRoll.traits.CanSeeAllPlayersTrait;
 import mafia.server.GameRoll.traits.CanSelectPlayerTrait;
-import mafia.server.state.GameState;
+import mafia.server.commands.ShowMessageCommand;
 import mafia.server.workers.PlayerWorker;
 
 import java.io.IOException;
@@ -13,8 +12,7 @@ import java.io.ObjectOutputStream;
 public class Inspector extends Citizen implements CanSeeAllPlayersTrait, CanSelectPlayerTrait {
     public void getPlayerReport(PlayerWorker inspector) {
         this.showAllPlayersToClient(inspector);
-        String reportTargetUsername = this.getPlayerUsername(inspector);
-        PlayerWorker reportTargetWorker = GameState.getPlayerWorkerByUsername(reportTargetUsername);
+        PlayerWorker reportTargetWorker = this.getSelectedPlayer(inspector);
         this.sendReport(reportTargetWorker.getGameRoll().isMafia(), inspector, reportTargetWorker);
     }
 

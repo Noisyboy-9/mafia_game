@@ -19,9 +19,9 @@ public interface CanVoteForKillTargetTrait extends CanSeeAllPlayersTrait, CanSel
      */
     default PlayerWorker voteForCitizenToKill(PlayerWorker playerWorker) {
         this.showAllPlayersToClient(playerWorker);
-        String killTargetUsername = this.getPlayerUsername(playerWorker);
+        PlayerWorker killTarget = this.getSelectedPlayer(playerWorker);
 
-        while (!GameState.usernameExist(killTargetUsername)) {
+        while (!GameState.usernameExist(killTarget.getUsername())) {
             ObjectOutputStream response = playerWorker.getResponse();
 
             try {
@@ -31,9 +31,9 @@ public interface CanVoteForKillTargetTrait extends CanSeeAllPlayersTrait, CanSel
             }
 
             this.showAllPlayersToClient(playerWorker);
-            this.getPlayerUsername(playerWorker);
+            killTarget = this.getSelectedPlayer(playerWorker);
         }
 
-        return GameState.getPlayerByUsername(killTargetUsername);
+        return killTarget;
     }
 }

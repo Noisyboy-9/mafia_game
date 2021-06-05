@@ -1,7 +1,7 @@
 package mafia.server.GameRoll.citizen;
 
-import mafia.server.commands.GetInputCommand;
 import mafia.server.GameRoll.citizen.abstracts.Citizen;
+import mafia.server.commands.GetInputCommand;
 import mafia.server.workers.PlayerWorker;
 
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class Mayor extends Citizen {
-    public boolean askForPollCancelation(PlayerWorker mayor) {
+    public boolean askForPollCancellation(PlayerWorker mayor) {
         ObjectOutputStream response = mayor.getResponse();
 
         try {

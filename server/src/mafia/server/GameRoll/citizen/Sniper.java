@@ -1,12 +1,10 @@
 package mafia.server.GameRoll.citizen;
 
-import mafia.server.commands.GetInputCommand;
-import mafia.server.commands.ShowMessageCommand;
-import mafia.server.GameRoll.GameRoll;
 import mafia.server.GameRoll.citizen.abstracts.Citizen;
 import mafia.server.GameRoll.traits.CanSeeAllPlayersTrait;
 import mafia.server.GameRoll.traits.CanSelectPlayerTrait;
-import mafia.server.state.GameState;
+import mafia.server.commands.GetInputCommand;
+import mafia.server.commands.ShowMessageCommand;
 import mafia.server.workers.PlayerWorker;
 
 import java.io.IOException;
@@ -23,7 +21,7 @@ public class Sniper extends Citizen implements CanSeeAllPlayersTrait, CanSelectP
             ioException.printStackTrace();
         }
 
-        ObjectInputStream request = mayor.getRequest();
+        ObjectInputStream request = sniper.getRequest();
         try {
             String mayorDecision = (String) request.readObject();
             return mayorDecision.equalsIgnoreCase("y");
@@ -36,11 +34,10 @@ public class Sniper extends Citizen implements CanSeeAllPlayersTrait, CanSelectP
 
     public void shootPlayer(PlayerWorker sniper) {
         this.showAllPlayersToClient(sniper);
-        String shootTargetUsername = this.getPlayerUsername(sniper);
-        GameRoll shootTarget = GameState.getPlayerWorkerByUsername(shootTargetUsername).getPlayer();
+        PlayerWorker shootTarget = this.getSelectedPlayer(sniper);
 
-        if (shootTarget.isMafia()) {
-            shootTarget.kill();
+        if (shootTarget.getGameRoll().isMafia()) {
+            shootTarget.getGameRoll().kill();
             return;
         }
 

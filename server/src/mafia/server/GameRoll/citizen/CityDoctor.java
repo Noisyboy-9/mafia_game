@@ -1,10 +1,8 @@
 package mafia.server.GameRoll.citizen;
 
-import mafia.server.GameRoll.GameRoll;
 import mafia.server.GameRoll.citizen.abstracts.Citizen;
 import mafia.server.GameRoll.traits.CanSeeAllPlayersTrait;
 import mafia.server.GameRoll.traits.CanSelectPlayerTrait;
-import mafia.server.state.GameState;
 import mafia.server.workers.PlayerWorker;
 
 public class CityDoctor extends Citizen implements CanSeeAllPlayersTrait, CanSelectPlayerTrait {
@@ -12,20 +10,18 @@ public class CityDoctor extends Citizen implements CanSeeAllPlayersTrait, CanSel
 
     public void selectPlayerToCure(PlayerWorker cityDoctor) {
         this.showAllPlayersToClient(cityDoctor);
-        String cureTargetUsername = this.getPlayerUsername(cityDoctor);
-        GameRoll player = GameState.getPlayerWorkerByUsername(cureTargetUsername).getPlayer();
+        PlayerWorker cureTarget = this.getSelectedPlayer(cityDoctor);
 
-        while (cityDoctor.getUsername().equals(cureTargetUsername) && this.hasCuredHimself) {
+        while (cityDoctor.getUsername().equals(cureTarget.getUsername()) && this.hasCuredHimself) {
 //            doctor lector has cured himself once in the past can not cure himself again.
-            this.showAllMafiasToClient(doctorLector);
-            cureTargetUsername = this.getPlayerUsername(doctorLector);
-            cureTarget = GameState.getPlayerWorkerByUsername(cureTargetUsername).getPlayer();
+            this.showAllPlayersToClient(cityDoctor);
+            cureTarget = this.getSelectedPlayer(cityDoctor);
         }
 
-        if (cityDoctor.getUsername().equals(cureTargetUsername)) {
+        if (cityDoctor.getUsername().equals(cureTarget.getUsername())) {
             this.hasCuredHimself = true;
         } else {
-            player.revive();
+            cureTarget.getGameRoll().revive();
         }
     }
 }
