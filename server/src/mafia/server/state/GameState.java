@@ -69,6 +69,10 @@ public class GameState {
     }
 
     public static String gameReportString() {
+        if (getSingletonInstance().deadPlayers.isEmpty()) {
+            return "no players all killed nothing to report about!";
+        }
+
         StringBuilder builder = new StringBuilder();
 
         int killedMafiasCount = getSingletonInstance().countKilledMafias();
