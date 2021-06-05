@@ -1,7 +1,7 @@
 package mafia.server.state;
 
+import mafia.server.exceptions.PlayerAlreadyExistException;
 import mafia.server.exceptions.PlayerIsAlreadyDeadException;
-import mafia.server.exceptions.SettingAlivePlayersInMiddleOfGameException;
 import mafia.server.workers.PlayerWorker;
 
 import java.util.ArrayList;
@@ -9,11 +9,19 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 
+/**
+ * The type Game state.
+ */
 public class GameState {
     private static GameState singletonInstance;
     private final ArrayList<PlayerWorker> alivePlayers = new ArrayList<>();
     private final ArrayList<PlayerWorker> deadPlayers = new ArrayList<>();
 
+    /**
+     * Gets singleton instance.
+     *
+     * @return the singleton instance
+     */
     public static GameState getSingletonInstance() {
         if (Objects.isNull(singletonInstance)) {
             singletonInstance = new GameState();
@@ -22,6 +30,12 @@ public class GameState {
         return singletonInstance;
     }
 
+    /**
+     * Gets player worker by username.
+     *
+     * @param username the username
+     * @return the player worker by username
+     */
     public static PlayerWorker getPlayerWorkerByUsername(String username) {
         for (PlayerWorker playerWorker : getSingletonInstance().alivePlayers) {
             if (playerWorker.getUsername().equals(username)) {
@@ -32,6 +46,12 @@ public class GameState {
         return null;
     }
 
+    /**
+     * Username exist boolean.
+     *
+     * @param username the username
+     * @return the boolean
+     */
     public static boolean usernameExist(String username) {
         for (PlayerWorker playerWorker : getSingletonInstance().alivePlayers) {
             if (playerWorker.getUsername().equals(username)) {
@@ -42,6 +62,11 @@ public class GameState {
         return false;
     }
 
+    /**
+     * Alive players to string string.
+     *
+     * @return the string
+     */
     public static String alivePlayersToString() {
         StringBuilder builder = new StringBuilder();
         builder.append("All Alive Players: \n");
@@ -54,6 +79,11 @@ public class GameState {
         return builder.toString();
     }
 
+    /**
+     * Alive mafias to string string.
+     *
+     * @return the string
+     */
     public static String aliveMafiasToString() {
         StringBuilder builder = new StringBuilder();
         builder.append("All Alive Mafias: \n");
@@ -68,6 +98,11 @@ public class GameState {
         return builder.toString();
     }
 
+    /**
+     * Game report string string.
+     *
+     * @return the string
+     */
     public static String gameReportString() {
         if (getSingletonInstance().deadPlayers.isEmpty()) {
             return "no players all killed nothing to report about!";
@@ -132,14 +167,26 @@ public class GameState {
     }
 
 
-    public void setAlivePlayers(ArrayList<PlayerWorker> players) throws SettingAlivePlayersInMiddleOfGameException {
-        if (!this.alivePlayers.isEmpty()) {
-            throw new SettingAlivePlayersInMiddleOfGameException("Game has alive players can't set them in the middle of game");
+    /**
+     * Add player.
+     *
+     * @param playerWorker the player worker
+     * @throws PlayerAlreadyExistException the player already exist exception
+     */
+    public void addPlayer(PlayerWorker playerWorker) throws PlayerAlreadyExistException {
+        if (this.alivePlayers.contains(playerWorker)) {
+            throw new PlayerAlreadyExistException("Can not add already added player to game twice");
         }
 
-        this.alivePlayers.addAll(players);
+        this.alivePlayers.add(playerWorker);
     }
 
+    /**
+     * Kill player.
+     *
+     * @param killTarget the kill target
+     * @throws PlayerIsAlreadyDeadException the player is already dead exception
+     */
     public void killPlayer(PlayerWorker killTarget) throws PlayerIsAlreadyDeadException {
         if (this.deadPlayers.contains(killTarget)) {
             throw new PlayerIsAlreadyDeadException("Player has been already killed can't kill him twice!");
