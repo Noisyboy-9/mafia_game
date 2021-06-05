@@ -5,9 +5,17 @@ import mafia.server.GameRoll.traits.CanSeeAllPlayersTrait;
 import mafia.server.GameRoll.traits.CanSelectPlayerTrait;
 import mafia.server.workers.PlayerWorker;
 
+/**
+ * The type City doctor.
+ */
 public class CityDoctor extends Citizen implements CanSeeAllPlayersTrait, CanSelectPlayerTrait {
     private boolean hasCuredHimself = false;
 
+    /**
+     * Select player to cure.
+     *
+     * @param cityDoctor the city doctor
+     */
     public void selectPlayerToCure(PlayerWorker cityDoctor) {
         this.showAllPlayersToClient(cityDoctor);
         PlayerWorker cureTarget = this.getSelectedPlayer(cityDoctor);

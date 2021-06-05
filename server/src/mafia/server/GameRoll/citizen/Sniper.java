@@ -11,7 +11,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * The type Sniper.
+ */
 public class Sniper extends Citizen implements CanSeeAllPlayersTrait, CanSelectPlayerTrait {
+    /**
+     * Want to act boolean.
+     *
+     * @param sniper the sniper
+     * @return the boolean
+     */
     public boolean wantToAct(PlayerWorker sniper) {
         ObjectOutputStream response = sniper.getResponse();
 
@@ -32,6 +41,11 @@ public class Sniper extends Citizen implements CanSeeAllPlayersTrait, CanSelectP
         return false;
     }
 
+    /**
+     * Shoot player.
+     *
+     * @param sniper the sniper
+     */
     public void shootPlayer(PlayerWorker sniper) {
         this.showAllPlayersToClient(sniper);
         PlayerWorker shootTarget = this.getSelectedPlayer(sniper);

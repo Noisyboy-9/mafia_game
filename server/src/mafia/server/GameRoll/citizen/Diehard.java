@@ -9,15 +9,27 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * The type Diehard.
+ */
 public class Diehard extends Citizen {
     private int remainingReportCount;
     private boolean hasArmor;
 
+    /**
+     * Instantiates a new Diehard.
+     */
     public Diehard() {
         this.remainingReportCount = 3;
         this.hasArmor = true;
     }
 
+    /**
+     * Ask for game report boolean.
+     *
+     * @param dieHard the die hard
+     * @return the boolean
+     */
     public boolean askForGameReport(PlayerWorker dieHard) {
         if (this.remainingReportCount == 0) {
 //            die hard can not get report more than default count of report times.
@@ -45,15 +57,28 @@ public class Diehard extends Citizen {
         return false;
     }
 
+    /**
+     * Gets game report.
+     *
+     * @return the game report
+     */
     public String getGameReport() {
         this.remainingReportCount--;
         return GameState.gameReportString();
     }
 
+    /**
+     * Has armor boolean.
+     *
+     * @return the boolean
+     */
     public boolean hasArmor() {
         return this.hasArmor;
     }
 
+    /**
+     * Remove armor.
+     */
     public void removeArmor() {
         this.hasArmor = false;
     }

@@ -9,7 +9,15 @@ import mafia.server.workers.PlayerWorker;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+/**
+ * The type Inspector.
+ */
 public class Inspector extends Citizen implements CanSeeAllPlayersTrait, CanSelectPlayerTrait {
+    /**
+     * Gets player report.
+     *
+     * @param inspector the inspector
+     */
     public void getPlayerReport(PlayerWorker inspector) {
         this.showAllPlayersToClient(inspector);
         PlayerWorker reportTargetWorker = this.getSelectedPlayer(inspector);

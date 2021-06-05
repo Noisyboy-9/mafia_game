@@ -8,7 +8,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * The type Mayor.
+ */
 public class Mayor extends Citizen {
+    /**
+     * Ask for poll cancellation boolean.
+     *
+     * @param mayor the mayor
+     * @return the boolean
+     */
     public boolean askForPollCancellation(PlayerWorker mayor) {
         ObjectOutputStream response = mayor.getResponse();
 

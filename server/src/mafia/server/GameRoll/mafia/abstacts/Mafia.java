@@ -7,6 +7,9 @@ import mafia.server.GameRoll.citizen.abstracts.Citizen;
  * Mafia role of the game.
  */
 public abstract class Mafia extends GameRoll {
+    /**
+     * The Is leader.
+     */
     protected boolean isLeader = false;
 
     /**
@@ -18,7 +21,10 @@ public abstract class Mafia extends GameRoll {
         citizen.kill();
     }
 
-    public void makeLeader() {
+    /**
+     * Make this the leader of mafias.
+     */
+    public void promoteToMafiaLeader() {
         this.isLeader = true;
     }
 }
