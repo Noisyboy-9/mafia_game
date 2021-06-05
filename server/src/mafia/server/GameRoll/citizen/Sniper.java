@@ -45,7 +45,7 @@ public class Sniper extends Citizen implements CanSeeAllPlayersTrait, CanSelectP
         }
 
 //            sniper has tried to shoot a citizen so sniper itself has to be killed.
-        sniper.getPlayer().kill();
+        sniper.getGameRoll().kill();
         ObjectOutputStream response = sniper.getResponse();
         try {
             response.writeObject(new ShowMessageCommand("Wrong shot! you are killed!").toString());

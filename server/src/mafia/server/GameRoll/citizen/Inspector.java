@@ -15,7 +15,7 @@ public class Inspector extends Citizen implements CanSeeAllPlayersTrait, CanSele
         this.showAllPlayersToClient(inspector);
         String reportTargetUsername = this.getPlayerUsername(inspector);
         PlayerWorker reportTargetWorker = GameState.getPlayerWorkerByUsername(reportTargetUsername);
-        this.sendReport(reportTargetWorker.getPlayer().isMafia(), inspector, reportTargetWorker);
+        this.sendReport(reportTargetWorker.getGameRoll().isMafia(), inspector, reportTargetWorker);
     }
 
     private void sendReport(boolean isMafia, PlayerWorker inspector, PlayerWorker reportTarget) {

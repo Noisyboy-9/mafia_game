@@ -16,7 +16,7 @@ public class PlayerWorker extends Thread {
     private final ObjectOutputStream response;
     private final ObjectInputStream request;
     private final String username;
-    private GameRoll player;
+    private GameRoll gameRoll;
 
     /**
      * Instantiates a new Player worker.
@@ -79,8 +79,8 @@ public class PlayerWorker extends Thread {
      *
      * @return the player
      */
-    public GameRoll getPlayer() {
-        return this.player;
+    public GameRoll getGameRoll() {
+        return this.gameRoll;
     }
 
     /**
