@@ -1,11 +1,11 @@
-package mafia.server.player;
+package mafia.server.GameRoll;
 
-import mafia.server.player.mafia.abstacts.Mafia;
+import mafia.server.GameRoll.mafia.abstacts.Mafia;
 
 /**
  * The abstract type player in mafia game.
  */
-public abstract class Player {
+public abstract class GameRoll {
     private boolean speakPermission;
     private int id;
     private boolean isKilled;

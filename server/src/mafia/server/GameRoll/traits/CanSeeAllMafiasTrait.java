@@ -1,4 +1,4 @@
-package mafia.server.player.traits;
+package mafia.server.GameRoll.traits;
 
 import mafia.server.commands.GetInputCommand;
 import mafia.server.commands.ShowMessageCommand;
@@ -9,20 +9,20 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 /**
- * The interface Can see all players trait.
+ * The interface Can see all mafias trait.
  */
-public interface CanSeeAllPlayersTrait {
+public interface CanSeeAllMafiasTrait {
     /**
-     * Show all players to client.
+     * Show all mafias to client.
      *
      * @param playerWorker the player worker
      */
-    default void showAllPlayersToClient(PlayerWorker playerWorker) {
+    default void showAllMafiasToClient(PlayerWorker playerWorker) {
         ObjectOutputStream response = playerWorker.getResponse();
 
         try {
             response.writeObject(new ShowMessageCommand("all available players"));
-            response.writeObject(new ShowMessageCommand(GameState.alivePlayersToString()).toString());
+            response.writeObject(new ShowMessageCommand(GameState.aliveMafiasToString()).toString());
             response.writeObject(new GetInputCommand("choose one to kill"));
         } catch (IOException ioException) {
             ioException.printStackTrace();

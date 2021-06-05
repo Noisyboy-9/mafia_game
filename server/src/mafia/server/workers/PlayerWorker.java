@@ -1,6 +1,6 @@
 package mafia.server.workers;
 
-import mafia.server.player.Player;
+import mafia.server.GameRoll.GameRoll;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -16,7 +16,7 @@ public class PlayerWorker extends Thread {
     private final ObjectOutputStream response;
     private final ObjectInputStream request;
     private final String username;
-    private Player player;
+    private GameRoll player;
 
     /**
      * Instantiates a new Player worker.
@@ -79,7 +79,7 @@ public class PlayerWorker extends Thread {
      *
      * @return the player
      */
-    public Player getPlayer() {
+    public GameRoll getPlayer() {
         return this.player;
     }
 

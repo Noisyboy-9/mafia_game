@@ -1,9 +1,9 @@
-package mafia.server.player.citizen;
+package mafia.server.GameRoll.citizen;
 
 import mafia.server.commands.ShowMessageCommand;
-import mafia.server.player.citizen.abstracts.Citizen;
-import mafia.server.player.traits.CanSeeAllPlayersTrait;
-import mafia.server.player.traits.CanSelectPlayerTrait;
+import mafia.server.GameRoll.citizen.abstracts.Citizen;
+import mafia.server.GameRoll.traits.CanSeeAllPlayersTrait;
+import mafia.server.GameRoll.traits.CanSelectPlayerTrait;
 import mafia.server.state.GameState;
 import mafia.server.workers.PlayerWorker;
 

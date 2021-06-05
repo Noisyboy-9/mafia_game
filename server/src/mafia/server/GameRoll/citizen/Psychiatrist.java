@@ -1,9 +1,9 @@
-package mafia.server.player.citizen;
+package mafia.server.GameRoll.citizen;
 
-import mafia.server.player.Player;
-import mafia.server.player.citizen.abstracts.Citizen;
-import mafia.server.player.traits.CanSeeAllPlayersTrait;
-import mafia.server.player.traits.CanSelectPlayerTrait;
+import mafia.server.GameRoll.GameRoll;
+import mafia.server.GameRoll.citizen.abstracts.Citizen;
+import mafia.server.GameRoll.traits.CanSeeAllPlayersTrait;
+import mafia.server.GameRoll.traits.CanSelectPlayerTrait;
 import mafia.server.state.GameState;
 import mafia.server.workers.PlayerWorker;
 
@@ -11,7 +11,7 @@ public class Psychiatrist extends Citizen implements CanSelectPlayerTrait, CanSe
     public void selectPlayerToMute(PlayerWorker psychiatrist) {
         this.showAllPlayersToClient(psychiatrist);
         String muteTargetUsername = this.getPlayerUsername(psychiatrist);
-        Player muteTarget = GameState.getPlayerWorkerByUsername(muteTargetUsername).getPlayer();
+        GameRoll muteTarget = GameState.getPlayerWorkerByUsername(muteTargetUsername).getPlayer();
         muteTarget.mute();
     }
 

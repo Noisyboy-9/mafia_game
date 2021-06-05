@@ -1,6 +1,6 @@
-package mafia.server.player.mafia;
+package mafia.server.GameRoll.mafia;
 
-import mafia.server.player.mafia.abstacts.Mafia;
+import mafia.server.GameRoll.mafia.abstacts.Mafia;
 
 /**
  * The role God Father in mafia game

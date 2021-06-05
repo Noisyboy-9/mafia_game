@@ -1,9 +1,9 @@
-package mafia.server.player.mafia;
+package mafia.server.GameRoll.mafia;
 
-import mafia.server.player.Player;
-import mafia.server.player.mafia.abstacts.Mafia;
-import mafia.server.player.traits.CanSeeAllMafiasTrait;
-import mafia.server.player.traits.CanSelectPlayerTrait;
+import mafia.server.GameRoll.GameRoll;
+import mafia.server.GameRoll.mafia.abstacts.Mafia;
+import mafia.server.GameRoll.traits.CanSeeAllMafiasTrait;
+import mafia.server.GameRoll.traits.CanSelectPlayerTrait;
 import mafia.server.state.GameState;
 import mafia.server.workers.PlayerWorker;
 
@@ -21,7 +21,7 @@ public class DoctorLector extends Mafia implements CanSeeAllMafiasTrait, CanSele
     public void selectMafiaToCure(PlayerWorker doctorLector) {
         this.showAllMafiasToClient(doctorLector);
         String cureTargetUsername = this.getPlayerUsername(doctorLector);
-        Player cureTarget = GameState.getPlayerWorkerByUsername(cureTargetUsername).getPlayer();
+        GameRoll cureTarget = GameState.getPlayerWorkerByUsername(cureTargetUsername).getPlayer();
 
         while (!cureTarget.isMafia()) {
             this.showAllMafiasToClient(doctorLector);

@@ -1,12 +1,12 @@
-package mafia.server.player.mafia.abstacts;
+package mafia.server.GameRoll.mafia.abstacts;
 
-import mafia.server.player.Player;
-import mafia.server.player.citizen.abstracts.Citizen;
+import mafia.server.GameRoll.GameRoll;
+import mafia.server.GameRoll.citizen.abstracts.Citizen;
 
 /**
  * Mafia role of the game.
  */
-public abstract class Mafia extends Player {
+public abstract class Mafia extends GameRoll {
     protected boolean isLeader = false;
 
     /**

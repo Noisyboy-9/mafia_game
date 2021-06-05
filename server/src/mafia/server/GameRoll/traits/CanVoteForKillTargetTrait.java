@@ -1,4 +1,4 @@
-package mafia.server.player.traits;
+package mafia.server.GameRoll.traits;
 
 import mafia.server.commands.ShowMessageCommand;
 import mafia.server.state.GameState;

@@ -1,7 +1,7 @@
-package mafia.server.player.citizen;
+package mafia.server.GameRoll.citizen;
 
 import mafia.server.commands.GetInputCommand;
-import mafia.server.player.citizen.abstracts.Citizen;
+import mafia.server.GameRoll.citizen.abstracts.Citizen;
 import mafia.server.state.GameState;
 import mafia.server.workers.PlayerWorker;
 

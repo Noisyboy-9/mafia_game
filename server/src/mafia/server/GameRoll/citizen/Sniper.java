@@ -1,11 +1,11 @@
-package mafia.server.player.citizen;
+package mafia.server.GameRoll.citizen;
 
 import mafia.server.commands.GetInputCommand;
 import mafia.server.commands.ShowMessageCommand;
-import mafia.server.player.Player;
-import mafia.server.player.citizen.abstracts.Citizen;
-import mafia.server.player.traits.CanSeeAllPlayersTrait;
-import mafia.server.player.traits.CanSelectPlayerTrait;
+import mafia.server.GameRoll.GameRoll;
+import mafia.server.GameRoll.citizen.abstracts.Citizen;
+import mafia.server.GameRoll.traits.CanSeeAllPlayersTrait;
+import mafia.server.GameRoll.traits.CanSelectPlayerTrait;
 import mafia.server.state.GameState;
 import mafia.server.workers.PlayerWorker;
 
@@ -37,7 +37,7 @@ public class Sniper extends Citizen implements CanSeeAllPlayersTrait, CanSelectP
     public void shootPlayer(PlayerWorker sniper) {
         this.showAllPlayersToClient(sniper);
         String shootTargetUsername = this.getPlayerUsername(sniper);
-        Player shootTarget = GameState.getPlayerWorkerByUsername(shootTargetUsername).getPlayer();
+        GameRoll shootTarget = GameState.getPlayerWorkerByUsername(shootTargetUsername).getPlayer();
 
         if (shootTarget.isMafia()) {
             shootTarget.kill();
