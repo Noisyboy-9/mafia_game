@@ -1,6 +1,7 @@
 package mafia.server;
 
 import mafia.server.commands.ShowMessageCommand;
+import mafia.server.exceptions.InvalidMaxPlayerCountException;
 import mafia.server.exceptions.NotEnoughPlayerException;
 import mafia.server.starter.GameStarter;
 import mafia.server.workers.PlayerWorker;
@@ -27,7 +28,7 @@ public class Main {
 //            } else {
             startManager.startNewGame();
 //            }
-        } catch (IOException | ClassNotFoundException | NotEnoughPlayerException exception) {
+        } catch (IOException | ClassNotFoundException | NotEnoughPlayerException | InvalidMaxPlayerCountException exception) {
             exception.printStackTrace();
         }
     }

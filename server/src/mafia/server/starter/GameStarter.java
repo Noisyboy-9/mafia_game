@@ -7,6 +7,7 @@ import mafia.server.GameRoll.mafia.GodFather;
 import mafia.server.GameRoll.mafia.NormalMafia;
 import mafia.server.GameRoll.mafia.abstacts.Mafia;
 import mafia.server.commands.ShowMessageCommand;
+import mafia.server.exceptions.InvalidMaxPlayerCountException;
 import mafia.server.exceptions.NotEnoughPlayerException;
 import mafia.server.exceptions.PlayerAlreadyExistException;
 import mafia.server.loop.GameLoop;
@@ -27,7 +28,17 @@ public class GameStarter {
     private final ArrayList<PlayerWorker> players = new ArrayList<>();
     private final int maxPlayerCount = 10;
     private PlayerWorker serverAdmin = null;
-//    private GameState gameState;
+
+    /**
+     * Instantiates a new Game starter.
+     *
+     * @throws InvalidMaxPlayerCountException the invalid max player count exception
+     */
+    public GameStarter() throws InvalidMaxPlayerCountException {
+        if (this.maxPlayerCount < 10) {
+            throw new InvalidMaxPlayerCountException("Player count can not be lower then 10");
+        }
+    }
 
     /**
      * Check if already have a worker with same username.
