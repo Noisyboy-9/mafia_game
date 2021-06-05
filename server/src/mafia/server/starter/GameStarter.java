@@ -14,6 +14,7 @@ import mafia.server.state.GameState;
 import mafia.server.workers.PlayerWorker;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -64,6 +65,7 @@ public class GameStarter {
         }
 
         this.assignRolesToPlayers();
+        this.sendRoleReportToEveryPlayer();
 
         GameLoop loop = new GameLoop();
         loop.start();
@@ -97,6 +99,22 @@ public class GameStarter {
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
+        }
+    }
+
+    private void sendRoleReportToEveryPlayer() {
+        for (PlayerWorker playerWorker : this.players) {
+            ObjectOutputStream response = playerWorker.getResponse();
+
+            try {
+                response.writeObject(new ShowMessageCommand("starting game").toString());
+                response.writeObject(new ShowMessageCommand(
+                        "your role in game is: " + playerWorker.getGameRoll().getRollString()
+                ).toString());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+
         }
     }
 
