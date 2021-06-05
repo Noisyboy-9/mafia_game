@@ -47,7 +47,7 @@ public class Diehard extends Citizen {
 
     public String getGameReport() {
         this.remainingReportCount--;
-        return GameState.makeGameReportString();
+        return GameState.gameReportString();
     }
 
     public boolean hasArmor() {

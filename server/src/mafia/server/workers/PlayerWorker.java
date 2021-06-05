@@ -91,4 +91,9 @@ public class PlayerWorker extends Thread {
     public String getUsername() {
         return username;
     }
+
+    @Override
+    public String toString() {
+        return "id: " + this.getGameRoll().getId() + " username: " + this.getUsername();
+    }
 }

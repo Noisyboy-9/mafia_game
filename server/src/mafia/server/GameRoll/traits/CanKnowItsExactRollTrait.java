@@ -118,5 +118,26 @@ public interface CanKnowItsExactRollTrait {
     default boolean isDoctorLector() {
         return this instanceof DoctorLector;
     }
+
+    /**
+     * Gets roll string.
+     *
+     * @return the roll string
+     */
+    default String getRollString() {
+        if (this.isCitizen()) {
+            if (this.isCityDoctor()) return "city doctor";
+            if (this.isDieHard()) return "die hard";
+            if (this.isInspector()) return "inspector";
+            if (this.isMayor()) return "mayor";
+            if (this.isPsychiatrist()) return "psychiatrist";
+            if (this.isSniper()) return "sniper";
+            else return "normal citizen";
+        } else {
+            if (this.isGodFather()) return "god father";
+            if (this.isDoctorLector()) return "doctor lector";
+            else return "normal mafia";
+        }
+    }
 }
 
