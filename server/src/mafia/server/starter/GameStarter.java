@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -134,14 +135,13 @@ public class GameStarter {
         Collections.shuffle(this.players);
 
 //        calculate number of mafias
-        int numberOfMafias = (int) Math.floor(((float) this.maxPlayerCount) / 3);
+        int numberOfMafias = this.maxPlayerCount / 3;
 
 //        determine mafias
-        ArrayList<PlayerWorker> mafias = (ArrayList<PlayerWorker>) this.players.subList(0, numberOfMafias - 1);
+        List<PlayerWorker> mafias = new ArrayList<>(this.players.subList(0, numberOfMafias));
 
 //        determine the citizens by removing every mafia from all players list
-        ArrayList<PlayerWorker> citizens = new ArrayList<>(this.players);
-        citizens.removeIf(mafias::contains);
+        List<PlayerWorker> citizens = new ArrayList<>(this.players.subList(numberOfMafias, this.maxPlayerCount));
 
 //        create rolls list
         ArrayList<Mafia> mafiaRollsList = this.generateAvailableMafiaRollsList(numberOfMafias);
@@ -159,7 +159,7 @@ public class GameStarter {
         }
     }
 
-    private void assignCitizenRolls(ArrayList<PlayerWorker> citizens, ArrayList<Citizen> rolls) {
+    private void assignCitizenRolls(List<PlayerWorker> citizens, ArrayList<Citizen> rolls) {
         while (!citizens.isEmpty()) {
             PlayerWorker citizen = this.getAndRemoveRandomElement(citizens);
             Citizen roll = this.getAndRemoveRandomElement(rolls);
@@ -167,7 +167,7 @@ public class GameStarter {
         }
     }
 
-    private void assignMafiaRolls(ArrayList<PlayerWorker> mafias, ArrayList<Mafia> rolls) {
+    private void assignMafiaRolls(List<PlayerWorker> mafias, ArrayList<Mafia> rolls) {
         while (!mafias.isEmpty()) {
             PlayerWorker mafia = this.getAndRemoveRandomElement(mafias);
             Mafia roll = this.getAndRemoveRandomElement(rolls);
@@ -175,7 +175,13 @@ public class GameStarter {
         }
     }
 
-    private <Type> Type getAndRemoveRandomElement(ArrayList<Type> list) {
+    private <Type> Type getAndRemoveRandomElement(List<Type> list) {
+        if (list.size() == 1) {
+            Type selectItem = list.get(0);
+            list.remove(0);
+            return selectItem;
+        }
+
         Random random = new Random();
         int randomIndex = random.nextInt(list.size() - 1);
 
