@@ -1,5 +1,6 @@
 package mafia.server.state;
 
+import mafia.server.enums.GameLoopStateEnum;
 import mafia.server.exceptions.PlayerAlreadyExistException;
 import mafia.server.exceptions.PlayerIsAlreadyDeadException;
 import mafia.server.workers.PlayerWorker;
@@ -16,6 +17,13 @@ public class GameState {
     private static GameState singletonInstance;
     private final ArrayList<PlayerWorker> alivePlayers;
     private final ArrayList<PlayerWorker> deadPlayers;
+    private GameLoopStateEnum gameLoopState;
+
+
+    private GameState() {
+        this.alivePlayers = new ArrayList<>();
+        this.deadPlayers = new ArrayList<>();
+    }
 
     /**
      * Gets singleton instance.
@@ -147,6 +155,34 @@ public class GameState {
     }
 
     /**
+     * Go in night mode.
+     */
+    public void goInNightMode() {
+        this.gameLoopState = GameLoopStateEnum.NIGHT;
+    }
+
+    /**
+     * Go in day mode.
+     */
+    public void goInDayMode() {
+        this.gameLoopState = GameLoopStateEnum.DAY;
+    }
+
+    /**
+     * Go in poll mode.
+     */
+    public void goInPollMode() {
+        this.gameLoopState = GameLoopStateEnum.POLL;
+    }
+
+    /**
+     * Go in introduction night.
+     */
+    public void goInIntroductionNight() {
+        this.gameLoopState = GameLoopStateEnum.INTRODUCTION_NIGHT;
+    }
+
+    /**
      * Add player.
      *
      * @param playerWorker the player worker
@@ -193,11 +229,6 @@ public class GameState {
         }
 
         return counter;
-    }
-
-    private GameState() {
-        this.alivePlayers = new ArrayList<>();
-        this.deadPlayers = new ArrayList<>();
     }
 
 
