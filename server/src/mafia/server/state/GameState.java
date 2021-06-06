@@ -26,6 +26,16 @@ public class GameState {
     }
 
     /**
+     * get all players in the game.
+     *
+     * @return the array list
+     */
+    public ArrayList<PlayerWorker> getAllGamePlayers() {
+        alivePlayers.addAll(deadPlayers);
+        return alivePlayers;
+    }
+
+    /**
      * Gets singleton instance.
      *
      * @return the singleton instance
@@ -152,6 +162,34 @@ public class GameState {
         }
 
         return builder.toString();
+    }
+
+    /**
+     * Mafia count int.
+     *
+     * @return the int
+     */
+    public static int mafiaCount() {
+        int count = 0;
+        for (PlayerWorker worker : getSingletonInstance().alivePlayers) {
+            if (worker.getGameRoll().isMafia()) count++;
+        }
+        return count;
+    }
+
+    /**
+     * Citizen count int.
+     *
+     * @return the int
+     */
+    public static int citizenCount() {
+        int count = 0;
+
+        for (PlayerWorker worker : getSingletonInstance().alivePlayers) {
+            if (worker.getGameRoll().isCitizen()) count++;
+        }
+
+        return count;
     }
 
     /**
