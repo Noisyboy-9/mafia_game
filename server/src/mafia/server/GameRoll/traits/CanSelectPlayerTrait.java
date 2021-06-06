@@ -27,7 +27,7 @@ public interface CanSelectPlayerTrait {
             ioException.printStackTrace();
         }
 
-        while (!GameState.usernameExist(votedForUsername)) {
+        while (!GameState.playerWithUsernameExist(votedForUsername)) {
             ObjectOutputStream response = playerWorker.getResponse();
             try {
                 response.writeObject(new ShowMessageCommand("User not found").toString());

@@ -36,6 +36,93 @@ public class GameState {
     }
 
     /**
+     * Go in night mode.
+     */
+    public void goInNightMode() {
+        this.gameLoopState = GameLoopStateEnum.NIGHT;
+    }
+
+    /**
+     * Go in day mode.
+     */
+    public void goInDayMode() {
+        this.gameLoopState = GameLoopStateEnum.DAY;
+    }
+
+    /**
+     * Go in poll mode.
+     */
+    public void goInPollMode() {
+        this.gameLoopState = GameLoopStateEnum.POLL;
+    }
+
+    /**
+     * Go in introduction night.
+     */
+    public void goInIntroductionNightMode() {
+        this.gameLoopState = GameLoopStateEnum.INTRODUCTION_NIGHT;
+    }
+
+    /**
+     * Add player.
+     *
+     * @param playerWorker the player worker
+     * @throws PlayerAlreadyExistException the player already exist exception
+     */
+    public void addPlayer(PlayerWorker playerWorker) throws PlayerAlreadyExistException {
+        if (this.alivePlayers.contains(playerWorker)) {
+            throw new PlayerAlreadyExistException("Can not add already added player to game twice");
+        }
+
+        this.alivePlayers.add(playerWorker);
+    }
+
+    /**
+     * Kill player.
+     *
+     * @param killTarget the kill target
+     * @throws PlayerIsAlreadyDeadException the player is already dead exception
+     */
+    public void killPlayer(PlayerWorker killTarget) throws PlayerIsAlreadyDeadException {
+        if (this.deadPlayers.contains(killTarget)) {
+            throw new PlayerIsAlreadyDeadException("Player has been already killed can't kill him twice!");
+        }
+
+        this.alivePlayers.remove(killTarget);
+        this.deadPlayers.add(killTarget);
+    }
+
+    /**
+     * Gets alive mafias.
+     *
+     * @return the alive mafias
+     */
+    public static ArrayList<PlayerWorker> getAliveMafias() {
+        ArrayList<PlayerWorker> mafias = new ArrayList<>();
+
+        for (PlayerWorker playerWorker : getSingletonInstance().alivePlayers) {
+            if (playerWorker.getGameRoll().isMafia()) mafias.add(playerWorker);
+        }
+
+        return mafias;
+    }
+
+    /**
+     * Gets alive citizens.
+     *
+     * @return the alive citizens
+     */
+    public static ArrayList<PlayerWorker> getAliveCitizens() {
+        ArrayList<PlayerWorker> citizens = new ArrayList<>();
+
+        for (PlayerWorker playerWorker : getSingletonInstance().alivePlayers) {
+            if (playerWorker.getGameRoll().isCitizen()) citizens.add(playerWorker);
+        }
+
+        return citizens;
+    }
+
+    /**
      * Gets singleton instance.
      *
      * @return the singleton instance
@@ -70,7 +157,7 @@ public class GameState {
      * @param username the username
      * @return the boolean
      */
-    public static boolean usernameExist(String username) {
+    public static boolean playerWithUsernameExist(String username) {
         for (PlayerWorker playerWorker : getSingletonInstance().alivePlayers) {
             if (playerWorker.getUsername().equals(username)) {
                 return true;
@@ -106,11 +193,9 @@ public class GameState {
         StringBuilder builder = new StringBuilder();
         builder.append("All Alive Mafias: \n");
 
-        for (PlayerWorker playerWorker : getSingletonInstance().alivePlayers) {
-            if (playerWorker.getGameRoll().isMafia()) {
-                builder.append(playerWorker);
-                builder.append("\n");
-            }
+        for (PlayerWorker playerWorker : getAliveMafias()) {
+            builder.append(playerWorker);
+            builder.append("\n");
         }
 
         return builder.toString();
@@ -169,12 +254,8 @@ public class GameState {
      *
      * @return the int
      */
-    public static int mafiaCount() {
-        int count = 0;
-        for (PlayerWorker worker : getSingletonInstance().alivePlayers) {
-            if (worker.getGameRoll().isMafia()) count++;
-        }
-        return count;
+    public static int aliveMafiaCount() {
+        return getAliveMafias().size();
     }
 
     /**
@@ -182,71 +263,8 @@ public class GameState {
      *
      * @return the int
      */
-    public static int citizenCount() {
-        int count = 0;
-
-        for (PlayerWorker worker : getSingletonInstance().alivePlayers) {
-            if (worker.getGameRoll().isCitizen()) count++;
-        }
-
-        return count;
-    }
-
-    /**
-     * Go in night mode.
-     */
-    public void goInNightMode() {
-        this.gameLoopState = GameLoopStateEnum.NIGHT;
-    }
-
-    /**
-     * Go in day mode.
-     */
-    public void goInDayMode() {
-        this.gameLoopState = GameLoopStateEnum.DAY;
-    }
-
-    /**
-     * Go in poll mode.
-     */
-    public void goInPollMode() {
-        this.gameLoopState = GameLoopStateEnum.POLL;
-    }
-
-    /**
-     * Go in introduction night.
-     */
-    public void goInIntroductionNightMode() {
-        this.gameLoopState = GameLoopStateEnum.INTRODUCTION_NIGHT;
-    }
-
-    /**
-     * Add player.
-     *
-     * @param playerWorker the player worker
-     * @throws PlayerAlreadyExistException the player already exist exception
-     */
-    public void addPlayer(PlayerWorker playerWorker) throws PlayerAlreadyExistException {
-        if (this.alivePlayers.contains(playerWorker)) {
-            throw new PlayerAlreadyExistException("Can not add already added player to game twice");
-        }
-
-        this.alivePlayers.add(playerWorker);
-    }
-
-    /**
-     * Kill player.
-     *
-     * @param killTarget the kill target
-     * @throws PlayerIsAlreadyDeadException the player is already dead exception
-     */
-    public void killPlayer(PlayerWorker killTarget) throws PlayerIsAlreadyDeadException {
-        if (this.deadPlayers.contains(killTarget)) {
-            throw new PlayerIsAlreadyDeadException("Player has been already killed can't kill him twice!");
-        }
-
-        this.alivePlayers.remove(killTarget);
-        this.deadPlayers.add(killTarget);
+    public static int aliveCitizenCount() {
+        return getAliveCitizens().size();
     }
 
     private int countKilledCitizens() {
@@ -268,7 +286,5 @@ public class GameState {
 
         return counter;
     }
-
-
 }
 

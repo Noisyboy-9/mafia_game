@@ -21,7 +21,7 @@ public interface CanVoteForKillTargetTrait extends CanSeeAllPlayersTrait, CanSel
         this.showAllPlayersToClient(playerWorker);
         PlayerWorker killTarget = this.getSelectedPlayer(playerWorker);
 
-        while (!GameState.usernameExist(killTarget.getUsername())) {
+        while (!GameState.playerWithUsernameExist(killTarget.getUsername())) {
             ObjectOutputStream response = playerWorker.getResponse();
 
             try {

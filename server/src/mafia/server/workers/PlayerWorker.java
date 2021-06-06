@@ -18,6 +18,22 @@ public class PlayerWorker extends Thread {
     private final String username;
     private GameRoll gameRoll;
 
+    /**
+     * Instantiates a new Player worker.
+     *
+     * @param socket   the socket
+     * @param request  the request
+     * @param response the response
+     * @param username the username
+     */
+    public PlayerWorker(Socket socket, ObjectInputStream request, ObjectOutputStream response, String username) {
+        this.socket = socket;
+        this.request = request;
+        this.response = response;
+        this.username = username;
+        this.setName(username);
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
@@ -88,21 +104,5 @@ public class PlayerWorker extends Thread {
     @Override
     public String toString() {
         return "id: " + this.getGameRoll().getId() + " username: " + this.getUsername();
-    }
-
-    /**
-     * Instantiates a new Player worker.
-     *
-     * @param socket   the socket
-     * @param request  the request
-     * @param response the response
-     * @param username the username
-     */
-    public PlayerWorker(Socket socket, ObjectInputStream request, ObjectOutputStream response, String username) {
-        this.socket = socket;
-        this.request = request;
-        this.response = response;
-        this.username = username;
-        this.setName(username);
     }
 }
