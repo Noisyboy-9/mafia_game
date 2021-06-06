@@ -88,6 +88,7 @@ public class GameState {
             throw new PlayerIsAlreadyDeadException("Player has been already killed can't kill him twice!");
         }
 
+        killTarget.getGameRoll().kill();
         this.alivePlayers.remove(killTarget);
         this.deadPlayers.add(killTarget);
     }
@@ -265,6 +266,58 @@ public class GameState {
      */
     public static int aliveCitizenCount() {
         return getAliveCitizens().size();
+    }
+
+    public static PlayerWorker getGodFather() {
+        for (PlayerWorker playerWorker : getAliveMafias()) {
+            if (playerWorker.getGameRoll().isGodFather()) {
+                return playerWorker;
+            }
+        }
+
+        return null;
+    }
+
+    public static PlayerWorker getDoctorLector() {
+        for (PlayerWorker playerWorker : getAliveMafias()) {
+            if (playerWorker.getGameRoll().isDoctorLector()) {
+                return playerWorker;
+            }
+        }
+
+        return null;
+    }
+
+    public static ArrayList<PlayerWorker> getNormalMafias() {
+        ArrayList<PlayerWorker> normalMafias = new ArrayList<>();
+
+        for (PlayerWorker playerWorker : getAliveMafias()) {
+            if (playerWorker.getGameRoll().isNormalMafia()) {
+                normalMafias.add(playerWorker);
+            }
+        }
+
+        if (normalMafias.size() == 0) {
+            return null;
+        }
+
+        return normalMafias;
+    }
+
+    public static PlayerWorker getMayor() {
+        for (PlayerWorker playerWorker : getAliveCitizens()) {
+            if (playerWorker.getGameRoll().isMayor()) return playerWorker;
+        }
+
+        return null;
+    }
+
+    public static PlayerWorker getCityDoctor() {
+        for (PlayerWorker playerWorker : getAliveCitizens()) {
+            if (playerWorker.getGameRoll().isCityDoctor()) return playerWorker;
+        }
+
+        return null;
     }
 
     private int countKilledCitizens() {
