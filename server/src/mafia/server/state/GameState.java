@@ -216,7 +216,7 @@ public class GameState {
     /**
      * Go in introduction night.
      */
-    public void goInIntroductionNight() {
+    public void goInIntroductionNightMode() {
         this.gameLoopState = GameLoopStateEnum.INTRODUCTION_NIGHT;
     }
 
