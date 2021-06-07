@@ -9,27 +9,21 @@ import mafia.server.workers.PlayerWorker;
  * The type City doctor.
  */
 public class CityDoctor extends Citizen implements CanSeeAllPlayersTrait, CanSelectPlayerTrait {
-    private boolean hasCuredHimself = false;
-
     /**
      * Select player to cure.
      *
      * @param cityDoctor the city doctor
      */
-    public void selectPlayerToCure(PlayerWorker cityDoctor) {
+    public PlayerWorker selectPlayerToCure(PlayerWorker cityDoctor) {
         this.showAllPlayersToClient(cityDoctor);
         PlayerWorker cureTarget = this.getSelectedPlayer(cityDoctor);
 
-        while (cityDoctor.getUsername().equals(cureTarget.getUsername()) && this.hasCuredHimself) {
+        while (cityDoctor.getUsername().equals(cureTarget.getUsername())) {
 //            doctor lector has cured himself once in the past can not cure himself again.
             this.showAllPlayersToClient(cityDoctor);
             cureTarget = this.getSelectedPlayer(cityDoctor);
         }
 
-        if (cityDoctor.getUsername().equals(cureTarget.getUsername())) {
-            this.hasCuredHimself = true;
-        } else {
-            cureTarget.getGameRoll().revive();
-        }
+        return cureTarget;
     }
 }

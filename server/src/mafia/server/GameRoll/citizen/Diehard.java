@@ -22,7 +22,7 @@ public class Diehard extends Citizen {
      * @param dieHard the die hard
      * @return the boolean
      */
-    public boolean askForGameReport(PlayerWorker dieHard) {
+    public boolean wantsGameReport(PlayerWorker dieHard) {
         if (this.remainingReportCount == 0) {
 //            die hard can not get report more than default count of report times.
             return false;

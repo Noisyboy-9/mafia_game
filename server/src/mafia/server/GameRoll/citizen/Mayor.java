@@ -22,7 +22,7 @@ public class Mayor extends Citizen {
         ObjectOutputStream response = mayor.getResponse();
 
         try {
-            response.writeObject(new GetInputCommand("want to cancel poll?(Y for yes, N for no)"));
+            response.writeObject(new GetInputCommand("want to cancel poll?(Y for yes, N for no)").toString());
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }

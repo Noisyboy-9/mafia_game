@@ -25,7 +25,7 @@ public class Sniper extends Citizen implements CanSeeAllPlayersTrait, CanSelectP
         ObjectOutputStream response = sniper.getResponse();
 
         try {
-            response.writeObject(new GetInputCommand("want to take shot?(Y for yes, N for no)"));
+            response.writeObject(new GetInputCommand("want to take shot?(Y for yes, N for no)").toString());
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
