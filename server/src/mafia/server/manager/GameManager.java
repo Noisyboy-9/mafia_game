@@ -1,6 +1,10 @@
 package mafia.server.manager;
 
+import mafia.server.GameRoll.citizen.*;
+import mafia.server.GameRoll.mafia.DoctorLector;
+import mafia.server.GameRoll.mafia.abstacts.Mafia;
 import mafia.server.commands.ShowMessageCommand;
+import mafia.server.exceptions.BottomMafiaCanNotKillCitizenException;
 import mafia.server.exceptions.PlayerIsAlreadyDeadException;
 import mafia.server.state.GameState;
 import mafia.server.workers.PlayerWorker;
@@ -8,11 +12,150 @@ import mafia.server.workers.PlayerWorker;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
 
 public class GameManager {
     public void handleIntroductionNight() {
         this.introduceMafias();
         this.introduceCityDoctorToMayor();
+    }
+
+    public void handleNight() {
+        try {
+            this.handleMafiaCitizenKill();
+        } catch (PlayerIsAlreadyDeadException e) {
+            PlayerWorker mafiaLeader = GameState.getMafiaLeader();
+            ObjectOutputStream response = Objects.requireNonNull(mafiaLeader).getResponse();
+            try {
+                response.writeObject(new ShowMessageCommand("Player is already Dead!").toString());
+            } catch (IOException ioException) {
+                this.handlePlayerDisconnect(mafiaLeader);
+            }
+        }
+        this.handleMafiaDoctor();
+
+        this.handleCityDoctor();
+        this.handleCityInspector();
+        this.handleCitySniper();
+        this.handleCityPsychiatrist();
+        this.handleDieHard();
+    }
+
+    private void handleDieHard() {
+        PlayerWorker dieHardWorker = GameState.getDiehard();
+        if (Objects.isNull(dieHardWorker)) {
+//            die hard is dead
+            return;
+        }
+
+        Diehard diehard = (Diehard) dieHardWorker.getGameRoll();
+        if (diehard.wantsGameReport(dieHardWorker)) {
+            diehard.getGameReport();
+        }
+    }
+
+    private void handleCityPsychiatrist() {
+        PlayerWorker psychiatristWorker = GameState.getPsychiatrist();
+
+        if (Objects.isNull(psychiatristWorker)) {
+//            psychiatrist is null
+            return;
+        }
+
+        Psychiatrist psychiatrist = (Psychiatrist) psychiatristWorker.getGameRoll();
+        psychiatrist.selectPlayerToMute(psychiatristWorker);
+    }
+
+    private void handleCitySniper() {
+        PlayerWorker sniperWorker = GameState.getSniper();
+
+        if (Objects.isNull(sniperWorker)) {
+//            sniper is dead
+            return;
+        }
+
+        Sniper sniper = (Sniper) sniperWorker.getGameRoll();
+        if (sniper.wantToAct(sniperWorker)) {
+            sniper.shootPlayer(sniperWorker);
+        }
+    }
+
+    private void handleCityInspector() {
+        PlayerWorker inspectorWorker = GameState.getInspector();
+
+        if (Objects.isNull(inspectorWorker)) {
+//            city inspector is dead
+            return;
+        }
+
+        Inspector inspector = (Inspector) inspectorWorker.getGameRoll();
+        inspector.getPlayerReport(inspectorWorker);
+    }
+
+    private void handleCityDoctor() {
+        PlayerWorker cityDoctorWorker = GameState.getCityDoctor();
+
+        if (Objects.isNull(cityDoctorWorker)) {
+//            city doctor is dead
+            return;
+        }
+
+        CityDoctor cityDoctor = (CityDoctor) cityDoctorWorker.getGameRoll();
+        cityDoctor.selectPlayerToCure(cityDoctorWorker).getGameRoll().revive();
+    }
+
+    private void handleMafiaDoctor() {
+        PlayerWorker doctorLectorWorker = GameState.getDoctorLector();
+
+        if (Objects.isNull(doctorLectorWorker)) {
+//            doctor lector is dead
+            return;
+        }
+
+        DoctorLector doctorLector = (DoctorLector) doctorLectorWorker.getGameRoll();
+        doctorLector.selectMafiaToCure(doctorLectorWorker).getGameRoll().revive();
+    }
+
+    private void handleMafiaCitizenKill() throws PlayerIsAlreadyDeadException {
+        HashMap<PlayerWorker, PlayerWorker> votes = this.getBottomMafiasKillTargetVote();
+        PlayerWorker mafiaKillTarget = this.getMafiaLeaderKillTarget(votes);
+        GameState.getSingletonInstance().killPlayer(mafiaKillTarget);
+    }
+
+    private PlayerWorker getMafiaLeaderKillTarget(HashMap<PlayerWorker, PlayerWorker> votes) {
+        PlayerWorker mafiaLeaderWorker = GameState.getMafiaLeader();
+        Mafia mafiaLeader = (Mafia) Objects.requireNonNull(mafiaLeaderWorker).getGameRoll();
+
+        try {
+            mafiaLeader.showOtherMafiasVote(votes, mafiaLeaderWorker);
+        } catch (IOException ioException) {
+            this.handlePlayerDisconnect(mafiaLeaderWorker);
+        }
+
+        PlayerWorker killTarget = null;
+
+        try {
+            killTarget = mafiaLeader.selectCitizenToKill(mafiaLeaderWorker);
+        } catch (IOException ioException) {
+            this.handlePlayerDisconnect(mafiaLeaderWorker);
+        } catch (BottomMafiaCanNotKillCitizenException e) {
+            e.printStackTrace();
+        }
+
+        return killTarget;
+    }
+
+    private HashMap<PlayerWorker, PlayerWorker> getBottomMafiasKillTargetVote() {
+        ArrayList<PlayerWorker> mafias = GameState.getAliveMafias();
+        HashMap<PlayerWorker, PlayerWorker> votes = new HashMap<>();
+        for (PlayerWorker mafiaWorker : mafias) {
+            Mafia mafia = (Mafia) mafiaWorker.getGameRoll();
+            if (!mafia.isLeader()) {
+                votes.put(mafiaWorker, mafia.voteForCitizenToKill(mafiaWorker));
+            }
+        }
+        return votes;
     }
 
     private void introduceCityDoctorToMayor() {
@@ -22,7 +165,7 @@ public class GameManager {
         if (mayor != null && cityDoctor != null) {
             ObjectOutputStream mayorResponse = mayor.getResponse();
             try {
-                mayorResponse.writeObject(new ShowMessageCommand(cityDoctor.getUsername() + " is city doctor"));
+                mayorResponse.writeObject(new ShowMessageCommand(cityDoctor.getUsername() + " is city doctor").toString());
             } catch (IOException ioException) {
                 this.handlePlayerDisconnect(mayor);
             }
@@ -36,7 +179,7 @@ public class GameManager {
         for (PlayerWorker mafia : mafias) {
             ObjectOutputStream response = mafia.getResponse();
             try {
-                response.writeObject(new ShowMessageCommand(mafiaString));
+                response.writeObject(new ShowMessageCommand(mafiaString).toString());
             } catch (IOException ioException) {
                 this.handlePlayerDisconnect(mafia);
             }
@@ -57,7 +200,7 @@ public class GameManager {
             ObjectOutputStream response = playerWorker.getResponse();
 
             try {
-                response.writeObject(new ShowMessageCommand(message));
+                response.writeObject(new ShowMessageCommand(message).toString());
             } catch (IOException ignored) {
             }
         }

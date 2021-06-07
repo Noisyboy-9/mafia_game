@@ -1,6 +1,6 @@
 package mafia.server.enums;
 
-public enum GameLoopStateEnum {
+public enum GameTimeEnum {
     DAY,
     NIGHT,
     POLL,

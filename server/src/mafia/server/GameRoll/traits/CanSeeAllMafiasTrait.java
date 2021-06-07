@@ -20,9 +20,9 @@ public interface CanSeeAllMafiasTrait {
     default void showAllMafiasToClient(PlayerWorker playerWorker) {
         try {
             ObjectOutputStream response = playerWorker.getResponse();
-            response.writeObject(new ShowMessageCommand("all available players"));
+            response.writeObject(new ShowMessageCommand("all available players").toString());
             response.writeObject(new ShowMessageCommand(GameState.aliveMafiasToString()).toString());
-            response.writeObject(new GetInputCommand("choose one to kill"));
+            response.writeObject(new GetInputCommand("choose one to kill").toString());
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }

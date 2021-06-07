@@ -21,9 +21,9 @@ public interface CanSeeAllPlayersTrait {
         ObjectOutputStream response = playerWorker.getResponse();
 
         try {
-            response.writeObject(new ShowMessageCommand("all available players"));
+            response.writeObject(new ShowMessageCommand("all available players").toString());
             response.writeObject(new ShowMessageCommand(GameState.alivePlayersToString()).toString());
-            response.writeObject(new GetInputCommand("choose one to kill"));
+            response.writeObject(new GetInputCommand("choose one to kill").toString());
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }

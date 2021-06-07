@@ -1,6 +1,7 @@
 package mafia.server.state;
 
-import mafia.server.enums.GameLoopStateEnum;
+import mafia.server.GameRoll.mafia.abstacts.Mafia;
+import mafia.server.enums.GameTimeEnum;
 import mafia.server.exceptions.PlayerAlreadyExistException;
 import mafia.server.exceptions.PlayerIsAlreadyDeadException;
 import mafia.server.workers.PlayerWorker;
@@ -17,8 +18,7 @@ public class GameState {
     private static GameState singletonInstance;
     private final ArrayList<PlayerWorker> alivePlayers;
     private final ArrayList<PlayerWorker> deadPlayers;
-    private GameLoopStateEnum gameLoopState;
-
+    private GameTimeEnum gameTimeEnum;
 
     private GameState() {
         this.alivePlayers = new ArrayList<>();
@@ -39,28 +39,28 @@ public class GameState {
      * Go in night mode.
      */
     public void goInNightMode() {
-        this.gameLoopState = GameLoopStateEnum.NIGHT;
+        this.gameTimeEnum = GameTimeEnum.NIGHT;
     }
 
     /**
      * Go in day mode.
      */
     public void goInDayMode() {
-        this.gameLoopState = GameLoopStateEnum.DAY;
+        this.gameTimeEnum = GameTimeEnum.DAY;
     }
 
     /**
      * Go in poll mode.
      */
     public void goInPollMode() {
-        this.gameLoopState = GameLoopStateEnum.POLL;
+        this.gameTimeEnum = GameTimeEnum.POLL;
     }
 
     /**
      * Go in introduction night.
      */
     public void goInIntroductionNightMode() {
-        this.gameLoopState = GameLoopStateEnum.INTRODUCTION_NIGHT;
+        this.gameTimeEnum = GameTimeEnum.INTRODUCTION_NIGHT;
     }
 
     /**
@@ -268,6 +268,11 @@ public class GameState {
         return getAliveCitizens().size();
     }
 
+    /**
+     * Gets god father.
+     *
+     * @return the god father
+     */
     public static PlayerWorker getGodFather() {
         for (PlayerWorker playerWorker : getAliveMafias()) {
             if (playerWorker.getGameRoll().isGodFather()) {
@@ -278,6 +283,11 @@ public class GameState {
         return null;
     }
 
+    /**
+     * Gets doctor lector.
+     *
+     * @return the doctor lector
+     */
     public static PlayerWorker getDoctorLector() {
         for (PlayerWorker playerWorker : getAliveMafias()) {
             if (playerWorker.getGameRoll().isDoctorLector()) {
@@ -288,6 +298,11 @@ public class GameState {
         return null;
     }
 
+    /**
+     * Gets normal mafias.
+     *
+     * @return the normal mafias
+     */
     public static ArrayList<PlayerWorker> getNormalMafias() {
         ArrayList<PlayerWorker> normalMafias = new ArrayList<>();
 
@@ -304,6 +319,11 @@ public class GameState {
         return normalMafias;
     }
 
+    /**
+     * Gets mayor.
+     *
+     * @return the mayor
+     */
     public static PlayerWorker getMayor() {
         for (PlayerWorker playerWorker : getAliveCitizens()) {
             if (playerWorker.getGameRoll().isMayor()) return playerWorker;
@@ -312,9 +332,119 @@ public class GameState {
         return null;
     }
 
+    /**
+     * Gets city doctor.
+     *
+     * @return the city doctor
+     */
     public static PlayerWorker getCityDoctor() {
         for (PlayerWorker playerWorker : getAliveCitizens()) {
             if (playerWorker.getGameRoll().isCityDoctor()) return playerWorker;
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets mafia leader.
+     *
+     * @return the mafia leader
+     */
+    public static PlayerWorker getMafiaLeader() {
+        for (PlayerWorker mafiaWorker : getAliveMafias()) {
+            Mafia mafia = (Mafia) mafiaWorker.getGameRoll();
+
+            if (mafia.isLeader()) {
+                return mafiaWorker;
+            }
+
+        }
+
+        return null;
+    }
+
+    /**
+     * Alive citizens to string string.
+     *
+     * @return the string
+     */
+    public static String aliveCitizensToString() {
+        StringBuilder builder = new StringBuilder();
+
+        for (PlayerWorker citizen : getAliveCitizens()) {
+            builder.append(citizen);
+        }
+
+        return builder.toString();
+    }
+
+    /**
+     * Sets new mafia leader.
+     */
+    public static void setNewMafiaLeader() {
+//        god father is dead have to select new mafia leader
+//        the first priority is doctor lector
+        PlayerWorker doctorLectorWorker = getDoctorLector();
+        if (!Objects.isNull(doctorLectorWorker)) {
+            Mafia doctorLector = (Mafia) doctorLectorWorker.getGameRoll();
+            doctorLector.promoteToMafiaLeader();
+            return;
+        }
+
+//        doctor lector and god father both are dead, selecting first normal mafia to be leader .
+        PlayerWorker mafiaWorker = Objects.requireNonNull(getNormalMafias()).get(0);
+        Mafia mafia = (Mafia) mafiaWorker.getGameRoll();
+        mafia.promoteToMafiaLeader();
+    }
+
+    /**
+     * Gets inspector.
+     *
+     * @return the inspector
+     */
+    public static PlayerWorker getInspector() {
+        for (PlayerWorker playerWorker : getAliveCitizens()) {
+            if (playerWorker.getGameRoll().isInspector()) return playerWorker;
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets sniper.
+     *
+     * @return the sniper
+     */
+    public static PlayerWorker getSniper() {
+
+        for (PlayerWorker playerWorker : getAliveCitizens()) {
+            if (playerWorker.getGameRoll().isSniper()) return playerWorker;
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets diehard.
+     *
+     * @return the diehard
+     */
+    public static PlayerWorker getDiehard() {
+        for (PlayerWorker playerWorker : getAliveCitizens()) {
+            if (playerWorker.getGameRoll().isDieHard()) return playerWorker;
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets psychiatrist.
+     *
+     * @return the psychiatrist
+     */
+    public static PlayerWorker getPsychiatrist() {
+        for (PlayerWorker playerWorker : getAliveCitizens()) {
+            if (playerWorker.getGameRoll().isPsychiatrist()) return playerWorker;
         }
 
         return null;

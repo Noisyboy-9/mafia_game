@@ -56,7 +56,7 @@ public class GameFinisher {
     private static void sendGameFinishCommand(PlayerWorker playerWorker) throws IOException {
         ObjectOutputStream response = playerWorker.getResponse();
         String message = gameWinner == GameWinnerEnum.MAFIA ? "mafias win the game" : "citizens win the game";
-        response.writeObject(new ShowMessageCommand(message));
+        response.writeObject(new ShowMessageCommand(message).toString());
     }
 
     private static boolean mafiaIsWinner() {
