@@ -20,7 +20,6 @@ public class GetInputCommand extends Command {
     @Override
     public void handle() {
         String userInput = this.getUserInput();
-//        TODO: send user input to sever
         try {
             this.request.writeObject(userInput);
         } catch (IOException ioException) {

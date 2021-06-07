@@ -43,7 +43,8 @@ public class ClientManager {
                 command = tokens.split(" ")[0];
             }
         } catch (IOException | ClassNotFoundException ioException) {
-            ioException.printStackTrace();
+            System.out.println("something went wrong");
+            System.out.println(ioException.getMessage());
         }
     }
 }
