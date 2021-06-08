@@ -110,6 +110,9 @@ public class PlayerWorkerManager {
             builder.append("\n");
         }
 
+//        removing last unnecessary \n character
+        builder.deleteCharAt(builder.length() - 1);
+
         return builder.toString();
     }
 

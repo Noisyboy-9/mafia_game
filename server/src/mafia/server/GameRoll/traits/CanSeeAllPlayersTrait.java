@@ -23,7 +23,7 @@ public interface CanSeeAllPlayersTrait {
         try {
             response.writeObject(new ShowMessageCommand("all available players").toString());
             response.writeObject(new ShowMessageCommand(GameState.getSingletonInstance().alivePlayersToString()).toString());
-            response.writeObject(new GetInputCommand("choose one to kill").toString());
+            response.writeObject(new GetInputCommand("Please enter selected player username: ").toString());
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
