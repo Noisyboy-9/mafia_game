@@ -27,7 +27,7 @@ public interface CanSelectPlayerTrait {
             ioException.printStackTrace();
         }
 
-        while (!GameState.playerWithUsernameExist(votedForUsername)) {
+        while (!GameState.getSingletonInstance().playerWithUsernameExist(votedForUsername)) {
             ObjectOutputStream response = playerWorker.getResponse();
             try {
                 response.writeObject(new ShowMessageCommand("User not found").toString());
@@ -37,6 +37,6 @@ public interface CanSelectPlayerTrait {
             }
         }
 
-        return GameState.getPlayerWorkerByUsername(votedForUsername);
+        return GameState.getSingletonInstance().getPlayerWorkerByUsername(votedForUsername);
     }
 }

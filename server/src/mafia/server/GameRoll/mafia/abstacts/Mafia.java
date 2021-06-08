@@ -36,7 +36,7 @@ public abstract class Mafia extends GameRoll implements CanVoteForKillTargetTrai
         if (this.isLeader) {
             this.isLeader = false;
         }
-        GameState.setNewMafiaLeader();
+        GameState.getSingletonInstance().setNewMafiaLeader();
         super.kill();
     }
 
@@ -56,22 +56,22 @@ public abstract class Mafia extends GameRoll implements CanVoteForKillTargetTrai
         ObjectOutputStream response = leaderWorker.getResponse();
         ObjectInputStream request = leaderWorker.getRequest();
 
-        response.writeObject(new ShowMessageCommand(GameState.aliveCitizensToString()).toString());
+        response.writeObject(new ShowMessageCommand(GameState.getSingletonInstance().aliveCitizensToString()).toString());
         response.writeObject(new GetInputCommand("Who do you want to kill?(please enter username) ").toString());
 
         String username = null;
         try {
             username = (String) request.readObject();
-            while (!GameState.playerWithUsernameExist(username)) {
+            while (!GameState.getSingletonInstance().playerWithUsernameExist(username)) {
                 response.writeObject(new ShowMessageCommand("invalid username!").toString());
-                response.writeObject(new ShowMessageCommand(GameState.aliveCitizensToString()).toString());
+                response.writeObject(new ShowMessageCommand(GameState.getSingletonInstance().aliveCitizensToString()).toString());
                 response.writeObject(new GetInputCommand("Who do you want to kill?(please enter username) ").toString());
 
                 username = (String) request.readObject();
             }
         } catch (ClassNotFoundException ignored) {
         }
-        return GameState.getPlayerWorkerByUsername(username);
+        return GameState.getSingletonInstance().getPlayerWorkerByUsername(username);
     }
 
     /**

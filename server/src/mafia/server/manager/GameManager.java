@@ -25,7 +25,7 @@ public class GameManager {
         try {
             this.handleMafiaCitizenKill();
         } catch (PlayerIsAlreadyDeadException e) {
-            PlayerWorker mafiaLeader = GameState.getMafiaLeader();
+            PlayerWorker mafiaLeader = GameState.getSingletonInstance().getMafiaLeader();
             ObjectOutputStream response = Objects.requireNonNull(mafiaLeader).getResponse();
             try {
                 response.writeObject(new ShowMessageCommand("Player is already Dead!").toString());
@@ -43,7 +43,7 @@ public class GameManager {
     }
 
     private void handleDieHard() {
-        PlayerWorker dieHardWorker = GameState.getDiehard();
+        PlayerWorker dieHardWorker = GameState.getSingletonInstance().getDiehard();
         if (Objects.isNull(dieHardWorker)) {
 //            die hard is dead
             return;
@@ -51,12 +51,16 @@ public class GameManager {
 
         Diehard diehard = (Diehard) dieHardWorker.getGameRoll();
         if (diehard.wantsGameReport(dieHardWorker)) {
-            diehard.getGameReport();
+            try {
+                diehard.sendGameReportString(dieHardWorker, diehard.getGameReportString());
+            } catch (IOException ioException) {
+                this.handlePlayerDisconnect(dieHardWorker);
+            }
         }
     }
 
     private void handleCityPsychiatrist() {
-        PlayerWorker psychiatristWorker = GameState.getPsychiatrist();
+        PlayerWorker psychiatristWorker = GameState.getSingletonInstance().getPsychiatrist();
 
         if (Objects.isNull(psychiatristWorker)) {
 //            psychiatrist is null
@@ -68,7 +72,7 @@ public class GameManager {
     }
 
     private void handleCitySniper() {
-        PlayerWorker sniperWorker = GameState.getSniper();
+        PlayerWorker sniperWorker = GameState.getSingletonInstance().getSniper();
 
         if (Objects.isNull(sniperWorker)) {
 //            sniper is dead
@@ -82,7 +86,7 @@ public class GameManager {
     }
 
     private void handleCityInspector() {
-        PlayerWorker inspectorWorker = GameState.getInspector();
+        PlayerWorker inspectorWorker = GameState.getSingletonInstance().getInspector();
 
         if (Objects.isNull(inspectorWorker)) {
 //            city inspector is dead
@@ -94,7 +98,7 @@ public class GameManager {
     }
 
     private void handleCityDoctor() {
-        PlayerWorker cityDoctorWorker = GameState.getCityDoctor();
+        PlayerWorker cityDoctorWorker = GameState.getSingletonInstance().getCityDoctor();
 
         if (Objects.isNull(cityDoctorWorker)) {
 //            city doctor is dead
@@ -106,7 +110,7 @@ public class GameManager {
     }
 
     private void handleMafiaDoctor() {
-        PlayerWorker doctorLectorWorker = GameState.getDoctorLector();
+        PlayerWorker doctorLectorWorker = GameState.getSingletonInstance().getDoctorLector();
 
         if (Objects.isNull(doctorLectorWorker)) {
 //            doctor lector is dead
@@ -124,7 +128,7 @@ public class GameManager {
     }
 
     private PlayerWorker getMafiaLeaderKillTarget(HashMap<PlayerWorker, PlayerWorker> votes) {
-        PlayerWorker mafiaLeaderWorker = GameState.getMafiaLeader();
+        PlayerWorker mafiaLeaderWorker = GameState.getSingletonInstance().getMafiaLeader();
         Mafia mafiaLeader = (Mafia) Objects.requireNonNull(mafiaLeaderWorker).getGameRoll();
 
         try {
@@ -147,7 +151,7 @@ public class GameManager {
     }
 
     private HashMap<PlayerWorker, PlayerWorker> getBottomMafiasKillTargetVote() {
-        ArrayList<PlayerWorker> mafias = GameState.getAliveMafias();
+        ArrayList<PlayerWorker> mafias = GameState.getSingletonInstance().getAllGamePlayers();
         HashMap<PlayerWorker, PlayerWorker> votes = new HashMap<>();
         for (PlayerWorker mafiaWorker : mafias) {
             Mafia mafia = (Mafia) mafiaWorker.getGameRoll();
@@ -159,8 +163,8 @@ public class GameManager {
     }
 
     private void introduceCityDoctorToMayor() {
-        PlayerWorker mayor = GameState.getMayor();
-        PlayerWorker cityDoctor = GameState.getCityDoctor();
+        PlayerWorker mayor = GameState.getSingletonInstance().getMayor();
+        PlayerWorker cityDoctor = GameState.getSingletonInstance().getCityDoctor();
 
         if (mayor != null && cityDoctor != null) {
             ObjectOutputStream mayorResponse = mayor.getResponse();
@@ -173,7 +177,7 @@ public class GameManager {
     }
 
     private void introduceMafias() {
-        ArrayList<PlayerWorker> mafias = GameState.getAliveMafias();
+        ArrayList<PlayerWorker> mafias = GameState.getSingletonInstance().getAllGamePlayers();
         String mafiaString = this.generateMafiaIntroductionString();
 
         for (PlayerWorker mafia : mafias) {
@@ -209,9 +213,9 @@ public class GameManager {
     private String generateMafiaIntroductionString() {
         StringBuilder builder = new StringBuilder();
 
-        PlayerWorker godFather = GameState.getGodFather();
-        PlayerWorker doctorLector = GameState.getDoctorLector();
-        ArrayList<PlayerWorker> normalMafias = GameState.getNormalMafias();
+        PlayerWorker godFather = GameState.getSingletonInstance().getGodFather();
+        PlayerWorker doctorLector = GameState.getSingletonInstance().getDoctorLector();
+        ArrayList<PlayerWorker> normalMafias = GameState.getSingletonInstance().getNormalMafias();
 
 
         if (godFather != null) {

@@ -2,6 +2,7 @@ package mafia.server.GameRoll.citizen;
 
 import mafia.server.GameRoll.citizen.abstracts.Citizen;
 import mafia.server.commands.GetInputCommand;
+import mafia.server.commands.ShowMessageCommand;
 import mafia.server.state.GameState;
 import mafia.server.workers.PlayerWorker;
 
@@ -54,9 +55,14 @@ public class Diehard extends Citizen {
      *
      * @return the game report
      */
-    public String getGameReport() {
+    public String getGameReportString() {
         this.remainingReportCount--;
-        return GameState.gameReportString();
+        return GameState.getSingletonInstance().gameReportString();
+    }
+
+    public void sendGameReportString(PlayerWorker diehard, String report) throws IOException {
+        ObjectOutputStream response = diehard.getResponse();
+        response.writeObject(new ShowMessageCommand(report).toString());
     }
 
     /**

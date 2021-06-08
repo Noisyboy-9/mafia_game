@@ -35,7 +35,7 @@ public class GameFinisher {
     }
 
     private static boolean citizenIsWinner() {
-        if (GameState.aliveMafiaCount() == 0) {
+        if (GameState.getSingletonInstance().aliveMafiaCount() == 0) {
             gameWinner = GameWinnerEnum.CITIZEN;
             return true;
         }
@@ -60,7 +60,7 @@ public class GameFinisher {
     }
 
     private static boolean mafiaIsWinner() {
-        if (GameState.aliveMafiaCount() >= GameState.aliveCitizenCount()) {
+        if (GameState.getSingletonInstance().aliveMafiaCount() >= GameState.getSingletonInstance().aliveCitizenCount()) {
             gameWinner = GameWinnerEnum.MAFIA;
             return true;
         }
