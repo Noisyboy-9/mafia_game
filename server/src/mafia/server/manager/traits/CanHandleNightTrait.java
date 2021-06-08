@@ -152,7 +152,7 @@ public interface CanHandleNightTrait extends CanHandlePlayerDisconnect {
     }
 
     private HashMap<PlayerWorker, PlayerWorker> getBottomMafiasKillTargetVote() {
-        ArrayList<PlayerWorker> mafias = GameState.getSingletonInstance().getAllGamePlayers();
+        ArrayList<PlayerWorker> mafias = GameState.getSingletonInstance().getAliveMafias();
         HashMap<PlayerWorker, PlayerWorker> votes = new HashMap<>();
         for (PlayerWorker mafiaWorker : mafias) {
             Mafia mafia = (Mafia) mafiaWorker.getGameRoll();

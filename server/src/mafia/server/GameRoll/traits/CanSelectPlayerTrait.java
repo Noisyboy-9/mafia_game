@@ -1,5 +1,6 @@
 package mafia.server.GameRoll.traits;
 
+import mafia.server.commands.GetInputCommand;
 import mafia.server.commands.ShowMessageCommand;
 import mafia.server.state.GameState;
 import mafia.server.workers.PlayerWorker;
@@ -31,6 +32,7 @@ public interface CanSelectPlayerTrait {
             ObjectOutputStream response = playerWorker.getResponse();
             try {
                 response.writeObject(new ShowMessageCommand("User not found").toString());
+                response.writeObject(new GetInputCommand("Please Input Again").toString());
                 votedForUsername = (String) request.readObject();
             } catch (IOException | ClassNotFoundException ioException) {
                 ioException.printStackTrace();
