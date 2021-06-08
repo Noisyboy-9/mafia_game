@@ -5,6 +5,8 @@ import mafia.server.GameRoll.traits.CanSeeAllPlayersTrait;
 import mafia.server.GameRoll.traits.CanSelectPlayerTrait;
 import mafia.server.commands.GetInputCommand;
 import mafia.server.commands.ShowMessageCommand;
+import mafia.server.exceptions.PlayerIsAlreadyDeadException;
+import mafia.server.state.GameState;
 import mafia.server.workers.PlayerWorker;
 
 import java.io.IOException;
@@ -45,14 +47,19 @@ public class Sniper extends Citizen implements CanSeeAllPlayersTrait, CanSelectP
      * Shoot player.
      *
      * @param sniper the sniper
+     * @return
      */
-    public void shootPlayer(PlayerWorker sniper) {
+    public PlayerWorker shootPlayer(PlayerWorker sniper) {
         this.showAllPlayersToClient(sniper);
         PlayerWorker shootTarget = this.getSelectedPlayer(sniper);
 
         if (shootTarget.getGameRoll().isMafia()) {
-            shootTarget.getGameRoll().kill();
-            return;
+            try {
+                GameState.getSingletonInstance().killPlayer(shootTarget);
+            } catch (PlayerIsAlreadyDeadException e) {
+                e.printStackTrace();
+            }
+            return shootTarget;
         }
 
 //            sniper has tried to shoot a citizen so sniper itself has to be killed.
@@ -63,5 +70,6 @@ public class Sniper extends Citizen implements CanSeeAllPlayersTrait, CanSelectP
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
+        return sniper;
     }
 }

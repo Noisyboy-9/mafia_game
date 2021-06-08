@@ -107,12 +107,4 @@ public class PlayerWorker extends Thread {
     public String toString() {
         return "id: " + this.getGameRoll().getId() + " username: " + this.getUsername();
     }
-
-    public void kill() {
-        try {
-            this.response.writeObject(new ShowMessageCommand("You are dead!").toString());
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
-    }
 }

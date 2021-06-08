@@ -27,8 +27,10 @@ public interface CanHandleNightTrait extends CanHandlePlayerDisconnect {
      * Handle night.
      */
     default void handleNight() {
+        PlayerWorker mafiaKillTarget = null;
+
         try {
-            this.handleMafiaCitizenKill();
+            mafiaKillTarget = this.handleMafiaCitizenKill();
         } catch (PlayerIsAlreadyDeadException e) {
             PlayerWorker mafiaLeader = GameState.getSingletonInstance().getMafiaLeader();
             ObjectOutputStream response = Objects.requireNonNull(mafiaLeader).getResponse();
@@ -42,9 +44,17 @@ public interface CanHandleNightTrait extends CanHandlePlayerDisconnect {
 
         this.handleCityDoctor();
         this.handleCityInspector();
-        this.handleCitySniper();
+        PlayerWorker sniperShootResult = this.handleCitySniper();
         this.handleCityPsychiatrist();
         this.handleDieHard();
+
+        if (!Objects.requireNonNull(mafiaKillTarget).isAlive()) {
+            this.broadcastMessageToAll(mafiaKillTarget.getUsername() + " is killed!");
+        }
+
+        if (!Objects.isNull(sniperShootResult)) {
+            this.broadcastMessageToAll(sniperShootResult.getUsername() + " is killed!");
+        }
     }
 
     private void handleDieHard() {
@@ -76,18 +86,20 @@ public interface CanHandleNightTrait extends CanHandlePlayerDisconnect {
         psychiatrist.selectPlayerToMute(psychiatristWorker);
     }
 
-    private void handleCitySniper() {
+    private PlayerWorker handleCitySniper() {
         PlayerWorker sniperWorker = GameState.getSingletonInstance().getSniper();
 
         if (Objects.isNull(sniperWorker)) {
 //            sniper is dead
-            return;
+            return null;
         }
 
         Sniper sniper = (Sniper) sniperWorker.getGameRoll();
         if (sniper.wantToAct(sniperWorker)) {
-            sniper.shootPlayer(sniperWorker);
+            return sniper.shootPlayer(sniperWorker);
         }
+
+        return null;
     }
 
     private void handleCityInspector() {
@@ -126,10 +138,11 @@ public interface CanHandleNightTrait extends CanHandlePlayerDisconnect {
         doctorLector.selectMafiaToCure(doctorLectorWorker).getGameRoll().revive();
     }
 
-    private void handleMafiaCitizenKill() throws PlayerIsAlreadyDeadException {
+    private PlayerWorker handleMafiaCitizenKill() throws PlayerIsAlreadyDeadException {
         HashMap<PlayerWorker, PlayerWorker> votes = this.getBottomMafiasKillTargetVote();
         PlayerWorker mafiaKillTarget = this.getMafiaLeaderKillTarget(votes);
         GameState.getSingletonInstance().killPlayer(mafiaKillTarget);
+        return mafiaKillTarget;
     }
 
     private PlayerWorker getMafiaLeaderKillTarget(HashMap<PlayerWorker, PlayerWorker> votes) {

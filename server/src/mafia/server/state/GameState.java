@@ -79,6 +79,7 @@ public class GameState {
         playerWorkerManager.killPlayer(killTarget);
     }
 
+
     /**
      * Gets alive mafias.
      *
