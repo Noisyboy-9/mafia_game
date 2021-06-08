@@ -1,10 +1,13 @@
 package mafia.server.state.managers;
 
 import mafia.server.GameRoll.mafia.abstacts.Mafia;
+import mafia.server.commands.KillPlayerCommand;
 import mafia.server.exceptions.PlayerAlreadyExistException;
 import mafia.server.exceptions.PlayerIsAlreadyDeadException;
 import mafia.server.workers.PlayerWorker;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -61,9 +64,21 @@ public class PlayerWorkerManager {
             throw new PlayerIsAlreadyDeadException("Player has been already killed can't kill him twice!");
         }
 
+
+//        set is killed flag on the player worker
         killTarget.getGameRoll().kill();
+
+//        add to killed players list and remove from alive players
         this.alivePlayers.remove(killTarget);
         this.deadPlayers.add(killTarget);
+
+
+//        send kill command to the client
+        ObjectOutputStream response = killTarget.getResponse();
+        try {
+            response.writeObject(new KillPlayerCommand().toString());
+        } catch (IOException ignored) {
+        }
     }
 
     /**

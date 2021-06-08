@@ -22,6 +22,10 @@ public class GameState {
     private GameState() {
     }
 
+    public ArrayList<PlayerWorker> getAlivePlayers() {
+        return this.playerWorkerManager.getAlivePlayers();
+    }
+
     /**
      * get all players in the game.
      *
@@ -78,7 +82,6 @@ public class GameState {
     public void killPlayer(PlayerWorker killTarget) throws PlayerIsAlreadyDeadException {
         playerWorkerManager.killPlayer(killTarget);
     }
-
 
     /**
      * Gets alive mafias.

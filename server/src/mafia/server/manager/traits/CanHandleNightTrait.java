@@ -49,10 +49,22 @@ public interface CanHandleNightTrait extends CanHandlePlayerDisconnect {
         this.handleDieHard();
 
         if (!Objects.requireNonNull(mafiaKillTarget).isAlive()) {
+            try {
+                GameState.getSingletonInstance().killPlayer(mafiaKillTarget);
+            } catch (PlayerIsAlreadyDeadException e) {
+                e.printStackTrace();
+            }
+
             this.broadcastMessageToAll(mafiaKillTarget.getUsername() + " is killed!");
         }
 
         if (!Objects.isNull(sniperShootResult)) {
+            try {
+                GameState.getSingletonInstance().killPlayer(mafiaKillTarget);
+            } catch (PlayerIsAlreadyDeadException e) {
+                e.printStackTrace();
+            }
+
             this.broadcastMessageToAll(sniperShootResult.getUsername() + " is killed!");
         }
     }
@@ -141,7 +153,7 @@ public interface CanHandleNightTrait extends CanHandlePlayerDisconnect {
     private PlayerWorker handleMafiaCitizenKill() throws PlayerIsAlreadyDeadException {
         HashMap<PlayerWorker, PlayerWorker> votes = this.getBottomMafiasKillTargetVote();
         PlayerWorker mafiaKillTarget = this.getMafiaLeaderKillTarget(votes);
-        GameState.getSingletonInstance().killPlayer(mafiaKillTarget);
+        mafiaKillTarget.getGameRoll().kill();
         return mafiaKillTarget;
     }
 

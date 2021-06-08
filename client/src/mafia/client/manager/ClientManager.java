@@ -17,7 +17,6 @@ public class ClientManager {
     /**
      * Instantiates a new Client manager.
      *
-     * @param socket   the socket
      * @param response the response
      * @param request  the request
      */
@@ -38,7 +37,10 @@ public class ClientManager {
             while (!command.equals("exit")) {
                 if (command.equals("getInput")) new GetInputCommand(tokens, request).handle();
                 if (command.equals("showMessage")) new ShowMessageCommand(tokens).handle();
-
+                if (command.equals("killClient")) {
+                    System.out.println("you have been killed");
+                    break;
+                }
                 tokens = (String) this.response.readObject();
                 command = tokens.split(" ")[0];
             }

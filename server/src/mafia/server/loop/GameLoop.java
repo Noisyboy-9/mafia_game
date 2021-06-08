@@ -55,7 +55,7 @@ public class GameLoop {
     private void startPoll() {
         GameState.getSingletonInstance().goInPollMode();
         this.broadcastGameTimeChange(GameTimeEnum.POLL);
-//        this.manager.handlePoll();
+        this.manager.handlePoll();
     }
 
     private void startNight() {
