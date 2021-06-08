@@ -1,9 +1,9 @@
 package mafia.server.state;
 
-import mafia.server.GameRoll.mafia.abstacts.Mafia;
 import mafia.server.exceptions.PlayerAlreadyExistException;
 import mafia.server.exceptions.PlayerIsAlreadyDeadException;
 import mafia.server.state.managers.GameTimeManager;
+import mafia.server.state.managers.PlayerWorkerManager;
 import mafia.server.workers.PlayerWorker;
 
 import java.util.ArrayList;
@@ -16,13 +16,10 @@ import java.util.Objects;
  */
 public class GameState {
     private static GameState singletonInstance;
-    private final ArrayList<PlayerWorker> alivePlayers;
-    private final ArrayList<PlayerWorker> deadPlayers;
     private final GameTimeManager gameTimeManager = new GameTimeManager();
+    private final PlayerWorkerManager playerWorkerManager = new PlayerWorkerManager();
 
     private GameState() {
-        this.alivePlayers = new ArrayList<>();
-        this.deadPlayers = new ArrayList<>();
     }
 
     /**
@@ -31,8 +28,7 @@ public class GameState {
      * @return the array list
      */
     public ArrayList<PlayerWorker> getAllGamePlayers() {
-        alivePlayers.addAll(deadPlayers);
-        return alivePlayers;
+        return playerWorkerManager.getAllGamePlayers();
     }
 
     /**
@@ -70,11 +66,7 @@ public class GameState {
      * @throws PlayerAlreadyExistException the player already exist exception
      */
     public void addPlayer(PlayerWorker playerWorker) throws PlayerAlreadyExistException {
-        if (this.alivePlayers.contains(playerWorker)) {
-            throw new PlayerAlreadyExistException("Can not add already added player to game twice");
-        }
-
-        this.alivePlayers.add(playerWorker);
+        playerWorkerManager.addPlayer(playerWorker);
     }
 
     /**
@@ -84,13 +76,7 @@ public class GameState {
      * @throws PlayerIsAlreadyDeadException the player is already dead exception
      */
     public void killPlayer(PlayerWorker killTarget) throws PlayerIsAlreadyDeadException {
-        if (this.deadPlayers.contains(killTarget)) {
-            throw new PlayerIsAlreadyDeadException("Player has been already killed can't kill him twice!");
-        }
-
-        killTarget.getGameRoll().kill();
-        this.alivePlayers.remove(killTarget);
-        this.deadPlayers.add(killTarget);
+        playerWorkerManager.killPlayer(killTarget);
     }
 
     /**
@@ -99,13 +85,7 @@ public class GameState {
      * @return the alive mafias
      */
     public ArrayList<PlayerWorker> getAliveMafias() {
-        ArrayList<PlayerWorker> mafias = new ArrayList<>();
-
-        for (PlayerWorker playerWorker : getSingletonInstance().alivePlayers) {
-            if (playerWorker.getGameRoll().isMafia()) mafias.add(playerWorker);
-        }
-
-        return mafias;
+        return playerWorkerManager.getAliveMafias();
     }
 
     /**
@@ -114,26 +94,7 @@ public class GameState {
      * @return the alive citizens
      */
     public ArrayList<PlayerWorker> getAliveCitizens() {
-        ArrayList<PlayerWorker> citizens = new ArrayList<>();
-
-        for (PlayerWorker playerWorker : getSingletonInstance().alivePlayers) {
-            if (playerWorker.getGameRoll().isCitizen()) citizens.add(playerWorker);
-        }
-
-        return citizens;
-    }
-
-    /**
-     * Gets singleton instance.
-     *
-     * @return the singleton instance
-     */
-    public static GameState getSingletonInstance() {
-        if (Objects.isNull(singletonInstance)) {
-            singletonInstance = new GameState();
-        }
-
-        return singletonInstance;
+        return playerWorkerManager.getAliveCitizens();
     }
 
     /**
@@ -143,7 +104,7 @@ public class GameState {
      * @return the player worker by username
      */
     public PlayerWorker getPlayerWorkerByUsername(String username) {
-        for (PlayerWorker playerWorker : getSingletonInstance().alivePlayers) {
+        for (PlayerWorker playerWorker : getSingletonInstance().playerWorkerManager.getAlivePlayers()) {
             if (playerWorker.getUsername().equals(username)) {
                 return playerWorker;
             }
@@ -159,7 +120,7 @@ public class GameState {
      * @return the boolean
      */
     public boolean playerWithUsernameExist(String username) {
-        for (PlayerWorker playerWorker : getSingletonInstance().alivePlayers) {
+        for (PlayerWorker playerWorker : getSingletonInstance().playerWorkerManager.getAlivePlayers()) {
             if (playerWorker.getUsername().equals(username)) {
                 return true;
             }
@@ -174,15 +135,7 @@ public class GameState {
      * @return the string
      */
     public String alivePlayersToString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("All Alive Players: \n");
-
-        for (PlayerWorker playerWorker : getSingletonInstance().alivePlayers) {
-            builder.append(playerWorker.toString());
-            builder.append("\n");
-        }
-
-        return builder.toString();
+        return playerWorkerManager.alivePlayersToString();
     }
 
     /**
@@ -191,15 +144,7 @@ public class GameState {
      * @return the string
      */
     public String aliveMafiasToString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("All Alive Mafias: \n");
-
-        for (PlayerWorker playerWorker : getAliveMafias()) {
-            builder.append(playerWorker);
-            builder.append("\n");
-        }
-
-        return builder.toString();
+        return playerWorkerManager.aliveMafiasToString();
     }
 
     /**
@@ -208,7 +153,7 @@ public class GameState {
      * @return the string
      */
     public String gameReportString() {
-        if (getSingletonInstance().deadPlayers.isEmpty()) {
+        if (getSingletonInstance().playerWorkerManager.getDeadPlayers().isEmpty()) {
             return "no players all killed nothing to report about!";
         }
 
@@ -221,12 +166,12 @@ public class GameState {
         builder.append("killed citizens count: ").append(killCitizensCount).append("\n");
 
 //        when informing every one that killed players had which rolls, it must be random and in no particular order.
-        Collections.shuffle(getSingletonInstance().deadPlayers);
+        Collections.shuffle(getSingletonInstance().playerWorkerManager.getDeadPlayers());
 
 
         if (killCitizensCount != 0) {
             HashSet<String> killedCitizenRoles = new HashSet<>();
-            for (PlayerWorker playerWorker : getSingletonInstance().deadPlayers) {
+            for (PlayerWorker playerWorker : getSingletonInstance().playerWorkerManager.getDeadPlayers()) {
                 if (playerWorker.getGameRoll().isCitizen()) {
                     killedCitizenRoles.add(playerWorker.getGameRoll().getRollString());
                 }
@@ -238,7 +183,7 @@ public class GameState {
 
         if (killedMafiasCount != 0) {
             HashSet<String> killedMafiasRole = new HashSet<>();
-            for (PlayerWorker playerWorker : getSingletonInstance().deadPlayers) {
+            for (PlayerWorker playerWorker : getSingletonInstance().playerWorkerManager.getDeadPlayers()) {
                 if (playerWorker.getGameRoll().isMafia()) {
                     killedMafiasRole.add(playerWorker.getGameRoll().getRollString());
                 }
@@ -256,7 +201,7 @@ public class GameState {
      * @return the int
      */
     public int aliveMafiaCount() {
-        return getAliveMafias().size();
+        return playerWorkerManager.aliveMafiaCount();
     }
 
     /**
@@ -265,7 +210,7 @@ public class GameState {
      * @return the int
      */
     public int aliveCitizenCount() {
-        return getAliveCitizens().size();
+        return playerWorkerManager.aliveCitizenCount();
     }
 
     /**
@@ -274,13 +219,7 @@ public class GameState {
      * @return the god father
      */
     public PlayerWorker getGodFather() {
-        for (PlayerWorker playerWorker : getAliveMafias()) {
-            if (playerWorker.getGameRoll().isGodFather()) {
-                return playerWorker;
-            }
-        }
-
-        return null;
+        return playerWorkerManager.getGodFather();
     }
 
     /**
@@ -289,13 +228,7 @@ public class GameState {
      * @return the doctor lector
      */
     public PlayerWorker getDoctorLector() {
-        for (PlayerWorker playerWorker : getAliveMafias()) {
-            if (playerWorker.getGameRoll().isDoctorLector()) {
-                return playerWorker;
-            }
-        }
-
-        return null;
+        return playerWorkerManager.getDoctorLector();
     }
 
     /**
@@ -304,19 +237,7 @@ public class GameState {
      * @return the normal mafias
      */
     public ArrayList<PlayerWorker> getNormalMafias() {
-        ArrayList<PlayerWorker> normalMafias = new ArrayList<>();
-
-        for (PlayerWorker playerWorker : getAliveMafias()) {
-            if (playerWorker.getGameRoll().isNormalMafia()) {
-                normalMafias.add(playerWorker);
-            }
-        }
-
-        if (normalMafias.size() == 0) {
-            return null;
-        }
-
-        return normalMafias;
+        return playerWorkerManager.getNormalMafias();
     }
 
     /**
@@ -325,11 +246,7 @@ public class GameState {
      * @return the mayor
      */
     public PlayerWorker getMayor() {
-        for (PlayerWorker playerWorker : getAliveCitizens()) {
-            if (playerWorker.getGameRoll().isMayor()) return playerWorker;
-        }
-
-        return null;
+        return playerWorkerManager.getMayor();
     }
 
     /**
@@ -338,11 +255,7 @@ public class GameState {
      * @return the city doctor
      */
     public PlayerWorker getCityDoctor() {
-        for (PlayerWorker playerWorker : getAliveCitizens()) {
-            if (playerWorker.getGameRoll().isCityDoctor()) return playerWorker;
-        }
-
-        return null;
+        return playerWorkerManager.getCityDoctor();
     }
 
     /**
@@ -351,16 +264,7 @@ public class GameState {
      * @return the mafia leader
      */
     public PlayerWorker getMafiaLeader() {
-        for (PlayerWorker mafiaWorker : getAliveMafias()) {
-            Mafia mafia = (Mafia) mafiaWorker.getGameRoll();
-
-            if (mafia.isLeader()) {
-                return mafiaWorker;
-            }
-
-        }
-
-        return null;
+        return playerWorkerManager.getMafiaLeader();
     }
 
     /**
@@ -369,32 +273,14 @@ public class GameState {
      * @return the string
      */
     public String aliveCitizensToString() {
-        StringBuilder builder = new StringBuilder();
-
-        for (PlayerWorker citizen : getAliveCitizens()) {
-            builder.append(citizen);
-        }
-
-        return builder.toString();
+        return playerWorkerManager.aliveCitizensToString();
     }
 
     /**
      * Sets new mafia leader.
      */
     public void setNewMafiaLeader() {
-//        god father is dead have to select new mafia leader
-//        the first priority is doctor lector
-        PlayerWorker doctorLectorWorker = getDoctorLector();
-        if (!Objects.isNull(doctorLectorWorker)) {
-            Mafia doctorLector = (Mafia) doctorLectorWorker.getGameRoll();
-            doctorLector.promoteToMafiaLeader();
-            return;
-        }
-
-//        doctor lector and god father both are dead, selecting first normal mafia to be leader .
-        PlayerWorker mafiaWorker = Objects.requireNonNull(getNormalMafias()).get(0);
-        Mafia mafia = (Mafia) mafiaWorker.getGameRoll();
-        mafia.promoteToMafiaLeader();
+        playerWorkerManager.setNewMafiaLeader();
     }
 
     /**
@@ -403,11 +289,7 @@ public class GameState {
      * @return the inspector
      */
     public PlayerWorker getInspector() {
-        for (PlayerWorker playerWorker : getAliveCitizens()) {
-            if (playerWorker.getGameRoll().isInspector()) return playerWorker;
-        }
-
-        return null;
+        return playerWorkerManager.getInspector();
     }
 
     /**
@@ -416,12 +298,7 @@ public class GameState {
      * @return the sniper
      */
     public PlayerWorker getSniper() {
-
-        for (PlayerWorker playerWorker : getAliveCitizens()) {
-            if (playerWorker.getGameRoll().isSniper()) return playerWorker;
-        }
-
-        return null;
+        return playerWorkerManager.getSniper();
     }
 
     /**
@@ -430,11 +307,7 @@ public class GameState {
      * @return the diehard
      */
     public PlayerWorker getDiehard() {
-        for (PlayerWorker playerWorker : getAliveCitizens()) {
-            if (playerWorker.getGameRoll().isDieHard()) return playerWorker;
-        }
-
-        return null;
+        return playerWorkerManager.getDiehard();
     }
 
     /**
@@ -443,17 +316,26 @@ public class GameState {
      * @return the psychiatrist
      */
     public PlayerWorker getPsychiatrist() {
-        for (PlayerWorker playerWorker : getAliveCitizens()) {
-            if (playerWorker.getGameRoll().isPsychiatrist()) return playerWorker;
+        return playerWorkerManager.getPsychiatrist();
+    }
+
+    /**
+     * Gets singleton instance.
+     *
+     * @return the singleton instance
+     */
+    public static GameState getSingletonInstance() {
+        if (Objects.isNull(singletonInstance)) {
+            singletonInstance = new GameState();
         }
 
-        return null;
+        return singletonInstance;
     }
 
     private int countKilledCitizens() {
         int counter = 0;
 
-        for (PlayerWorker playerWorker : this.deadPlayers) {
+        for (PlayerWorker playerWorker : this.playerWorkerManager.getDeadPlayers()) {
             if (playerWorker.getGameRoll().isCitizen()) counter++;
         }
 
@@ -463,7 +345,7 @@ public class GameState {
     private int countKilledMafias() {
         int counter = 0;
 
-        for (PlayerWorker playerWorker : this.deadPlayers) {
+        for (PlayerWorker playerWorker : this.playerWorkerManager.getDeadPlayers()) {
             if (playerWorker.getGameRoll().isMafia()) counter++;
         }
 
