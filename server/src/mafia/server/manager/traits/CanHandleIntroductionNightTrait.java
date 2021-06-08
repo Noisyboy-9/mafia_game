@@ -8,7 +8,13 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+/**
+ * The interface Can handle introduction night trait.
+ */
 public interface CanHandleIntroductionNightTrait extends CanHandlePlayerDisconnect {
+    /**
+     * Handle introduction night.
+     */
     default void handleIntroductionNight() {
         this.introduceMafias();
         this.introduceCityDoctorToMayor();

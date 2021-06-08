@@ -15,7 +15,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+/**
+ * The interface Can handle night trait.
+ */
 public interface CanHandleNightTrait extends CanHandlePlayerDisconnect {
+    /**
+     * Handle night.
+     */
     default void handleNight() {
         try {
             this.handleMafiaCitizenKill();
@@ -156,5 +162,4 @@ public interface CanHandleNightTrait extends CanHandlePlayerDisconnect {
         }
         return votes;
     }
-
 }

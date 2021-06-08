@@ -9,7 +9,15 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+/**
+ * The interface Can handle player disconnect.
+ */
 public interface CanHandlePlayerDisconnect {
+    /**
+     * Handle player disconnect.
+     *
+     * @param playerWorker the player worker
+     */
     default void handlePlayerDisconnect(PlayerWorker playerWorker) {
         this.broadcastMessageToAll(playerWorker.getUsername());
         try {
@@ -18,6 +26,11 @@ public interface CanHandlePlayerDisconnect {
         }
     }
 
+    /**
+     * Broadcast message to all.
+     *
+     * @param message the message
+     */
     default void broadcastMessageToAll(String message) {
         ArrayList<PlayerWorker> playerWorkers = GameState.getSingletonInstance().getAllGamePlayers();
         for (PlayerWorker playerWorker : playerWorkers) {
