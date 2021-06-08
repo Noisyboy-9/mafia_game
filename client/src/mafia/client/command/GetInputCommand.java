@@ -30,7 +30,7 @@ public class GetInputCommand extends Command {
     private String getUserInput() {
         System.out.println(String.join(" ", this.questionWords));
         Scanner scanner = new Scanner(System.in);
-        System.out.print("please input text: ");
+        System.out.print("Enter your response:\t");
         return scanner.nextLine();
     }
 }
