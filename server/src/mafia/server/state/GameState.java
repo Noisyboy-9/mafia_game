@@ -1,9 +1,9 @@
 package mafia.server.state;
 
 import mafia.server.GameRoll.mafia.abstacts.Mafia;
-import mafia.server.enums.GameTimeEnum;
 import mafia.server.exceptions.PlayerAlreadyExistException;
 import mafia.server.exceptions.PlayerIsAlreadyDeadException;
+import mafia.server.state.managers.GameTimeManager;
 import mafia.server.workers.PlayerWorker;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class GameState {
     private static GameState singletonInstance;
     private final ArrayList<PlayerWorker> alivePlayers;
     private final ArrayList<PlayerWorker> deadPlayers;
-    private GameTimeEnum gameTimeEnum;
+    private final GameTimeManager gameTimeManager = new GameTimeManager();
 
     private GameState() {
         this.alivePlayers = new ArrayList<>();
@@ -39,28 +39,28 @@ public class GameState {
      * Go in night mode.
      */
     public void goInNightMode() {
-        this.gameTimeEnum = GameTimeEnum.NIGHT;
+        gameTimeManager.goInNightMode();
     }
 
     /**
      * Go in day mode.
      */
     public void goInDayMode() {
-        this.gameTimeEnum = GameTimeEnum.DAY;
+        gameTimeManager.goInDayMode();
     }
 
     /**
      * Go in poll mode.
      */
     public void goInPollMode() {
-        this.gameTimeEnum = GameTimeEnum.POLL;
+        gameTimeManager.goInPollMode();
     }
 
     /**
      * Go in introduction night.
      */
     public void goInIntroductionNightMode() {
-        this.gameTimeEnum = GameTimeEnum.INTRODUCTION_NIGHT;
+        gameTimeManager.goInIntroductionNightMode();
     }
 
     /**
