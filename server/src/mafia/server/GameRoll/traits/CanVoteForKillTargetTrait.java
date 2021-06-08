@@ -14,24 +14,31 @@ public interface CanVoteForKillTargetTrait extends CanSeeAllPlayersTrait, CanSel
     /**
      * Vote for citizen to kill player worker.
      *
-     * @param playerWorker the player worker
+     * @param mafiaWorker the player worker
      * @return the player worker
      */
-    default PlayerWorker voteForCitizenToKill(PlayerWorker playerWorker) {
-        this.showAllPlayersToClient(playerWorker);
-        PlayerWorker killTarget = this.getSelectedPlayer(playerWorker);
+    default PlayerWorker voteForCitizenToKill(PlayerWorker mafiaWorker) {
+        this.showAllPlayersToClient(mafiaWorker);
+        PlayerWorker killTarget = this.getSelectedPlayer(mafiaWorker);
+        ObjectOutputStream response = mafiaWorker.getResponse();
+
+        while (mafiaWorker.equals(killTarget)) {
+            try {
+                response.writeObject(new ShowMessageCommand("Mafia can't kill mafia").toString());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        }
 
         while (!GameState.getSingletonInstance().playerWithUsernameExist(killTarget.getUsername())) {
-            ObjectOutputStream response = playerWorker.getResponse();
-
             try {
                 response.writeObject(new ShowMessageCommand("Player does not exist").toString());
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
 
-            this.showAllPlayersToClient(playerWorker);
-            killTarget = this.getSelectedPlayer(playerWorker);
+            this.showAllPlayersToClient(mafiaWorker);
+            killTarget = this.getSelectedPlayer(mafiaWorker);
         }
 
         return killTarget;

@@ -1,7 +1,9 @@
 package mafia.server.workers;
 
 import mafia.server.GameRoll.GameRoll;
+import mafia.server.commands.ShowMessageCommand;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -104,5 +106,13 @@ public class PlayerWorker extends Thread {
     @Override
     public String toString() {
         return "id: " + this.getGameRoll().getId() + " username: " + this.getUsername();
+    }
+
+    public void kill() {
+        try {
+            this.response.writeObject(new ShowMessageCommand("You are dead!").toString());
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
     }
 }

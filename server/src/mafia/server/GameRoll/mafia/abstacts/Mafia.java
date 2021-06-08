@@ -71,6 +71,20 @@ public abstract class Mafia extends GameRoll implements CanVoteForKillTargetTrai
             }
         } catch (ClassNotFoundException ignored) {
         }
+
+        PlayerWorker killTarget = GameState.getSingletonInstance().getPlayerWorkerByUsername(username);
+        while (killTarget.getGameRoll().isMafia()) {
+            response.writeObject(new ShowMessageCommand("Mafia can't kill another mafia").toString());
+            response.writeObject(new ShowMessageCommand(GameState.getSingletonInstance().aliveCitizensToString()).toString());
+            response.writeObject(new GetInputCommand("Who do you want to kill?(please enter username) ").toString());
+
+            try {
+                username = (String) request.readObject();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
         return GameState.getSingletonInstance().getPlayerWorkerByUsername(username);
     }
 
@@ -94,7 +108,7 @@ public abstract class Mafia extends GameRoll implements CanVoteForKillTargetTrai
             PlayerWorker voter = vote.getKey();
             PlayerWorker voteTarget = vote.getValue();
 
-            response.writeObject(new ShowMessageCommand(voter.getUsername() + " has voted for" + voteTarget.getUsername()).toString());
+            response.writeObject(new ShowMessageCommand(voter.getUsername() + " has voted for " + voteTarget.getUsername()).toString());
         }
     }
 }

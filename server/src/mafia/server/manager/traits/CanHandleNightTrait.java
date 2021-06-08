@@ -6,6 +6,7 @@ import mafia.server.GameRoll.mafia.abstacts.Mafia;
 import mafia.server.commands.ShowMessageCommand;
 import mafia.server.exceptions.BottomMafiaCanNotKillCitizenException;
 import mafia.server.exceptions.PlayerIsAlreadyDeadException;
+import mafia.server.runnables.MafiaVoteGetterRunnable;
 import mafia.server.state.GameState;
 import mafia.server.workers.PlayerWorker;
 
@@ -14,6 +15,9 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The interface Can handle night trait.
@@ -154,12 +158,31 @@ public interface CanHandleNightTrait extends CanHandlePlayerDisconnect {
     private HashMap<PlayerWorker, PlayerWorker> getBottomMafiasKillTargetVote() {
         ArrayList<PlayerWorker> mafias = GameState.getSingletonInstance().getAliveMafias();
         HashMap<PlayerWorker, PlayerWorker> votes = new HashMap<>();
+
+
+        ExecutorService executor = null;
+
         for (PlayerWorker mafiaWorker : mafias) {
             Mafia mafia = (Mafia) mafiaWorker.getGameRoll();
+            executor = Executors.newCachedThreadPool();
             if (!mafia.isLeader()) {
-                votes.put(mafiaWorker, mafia.voteForCitizenToKill(mafiaWorker));
+                executor.execute(new MafiaVoteGetterRunnable(mafiaWorker, votes));
             }
         }
+
+        try {
+            Objects.requireNonNull(executor).shutdown();
+            executor.awaitTermination(30, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Objects.requireNonNull(executor).awaitTermination(30, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         return votes;
     }
 }

@@ -35,7 +35,7 @@ public interface CanHandleIntroductionNightTrait extends CanHandlePlayerDisconne
     }
 
     private void introduceMafias() {
-        ArrayList<PlayerWorker> mafias = GameState.getSingletonInstance().getAllGamePlayers();
+        ArrayList<PlayerWorker> mafias = GameState.getSingletonInstance().getAliveMafias();
         String mafiaString = this.generateMafiaIntroductionString();
 
         for (PlayerWorker mafia : mafias) {

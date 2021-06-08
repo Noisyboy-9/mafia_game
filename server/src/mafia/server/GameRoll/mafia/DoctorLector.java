@@ -16,14 +16,6 @@ public class DoctorLector extends Mafia implements CanSeeAllMafiasTrait, CanSele
      */
     public PlayerWorker selectMafiaToCure(PlayerWorker doctorLector) {
         this.showAllMafiasToClient(doctorLector);
-        PlayerWorker cureTarget = this.getSelectedMafia(doctorLector);
-
-        while (doctorLector.getUsername().equals(cureTarget.getUsername())) {
-//            doctor lector has cured himself once in the past can not cure himself again.
-            this.showAllMafiasToClient(doctorLector);
-            cureTarget = this.getSelectedPlayer(doctorLector);
-        }
-
-        return cureTarget;
+        return this.getSelectedMafia(doctorLector);
     }
 }

@@ -16,14 +16,6 @@ public class CityDoctor extends Citizen implements CanSeeAllPlayersTrait, CanSel
      */
     public PlayerWorker selectPlayerToCure(PlayerWorker cityDoctor) {
         this.showAllPlayersToClient(cityDoctor);
-        PlayerWorker cureTarget = this.getSelectedPlayer(cityDoctor);
-
-        while (cityDoctor.getUsername().equals(cureTarget.getUsername())) {
-//            doctor lector has cured himself once in the past can not cure himself again.
-            this.showAllPlayersToClient(cityDoctor);
-            cureTarget = this.getSelectedPlayer(cityDoctor);
-        }
-
-        return cureTarget;
+        return this.getSelectedPlayer(cityDoctor);
     }
 }

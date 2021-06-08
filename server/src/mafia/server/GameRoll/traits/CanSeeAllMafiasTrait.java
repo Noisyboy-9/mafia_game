@@ -22,7 +22,7 @@ public interface CanSeeAllMafiasTrait {
             ObjectOutputStream response = playerWorker.getResponse();
             response.writeObject(new ShowMessageCommand("all available players").toString());
             response.writeObject(new ShowMessageCommand(GameState.getSingletonInstance().aliveMafiasToString()).toString());
-            response.writeObject(new GetInputCommand("choose one to kill").toString());
+            response.writeObject(new GetInputCommand("Choose one of the mafias.").toString());
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }

@@ -61,6 +61,7 @@ public class PlayerWorkerManager {
             throw new PlayerIsAlreadyDeadException("Player has been already killed can't kill him twice!");
         }
 
+        killTarget.kill();
         killTarget.getGameRoll().kill();
         this.alivePlayers.remove(killTarget);
         this.deadPlayers.add(killTarget);
@@ -255,7 +256,7 @@ public class PlayerWorkerManager {
         StringBuilder builder = new StringBuilder();
 
         for (PlayerWorker citizen : getAliveCitizens()) {
-            builder.append(citizen);
+            builder.append(citizen).append("\n");
         }
 
         return builder.toString();
