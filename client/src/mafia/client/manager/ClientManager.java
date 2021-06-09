@@ -2,6 +2,7 @@ package mafia.client.manager;
 
 import mafia.client.command.GetInputCommand;
 import mafia.client.command.ShowMessageCommand;
+import mafia.client.command.StartChatCommand;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -37,6 +38,7 @@ public class ClientManager {
             while (!command.equals("exit")) {
                 if (command.equals("getInput")) new GetInputCommand(tokens, request).handle();
                 if (command.equals("showMessage")) new ShowMessageCommand(tokens).handle();
+                if (command.equals("startChat")) new StartChatCommand(tokens, request).handle();
                 if (command.equals("killClient")) {
                     System.out.println("you have been killed");
                     break;
