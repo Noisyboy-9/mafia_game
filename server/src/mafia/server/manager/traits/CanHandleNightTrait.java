@@ -6,7 +6,7 @@ import mafia.server.GameRoll.mafia.abstacts.Mafia;
 import mafia.server.commands.ShowMessageCommand;
 import mafia.server.exceptions.BottomMafiaCanNotKillCitizenException;
 import mafia.server.exceptions.PlayerIsAlreadyDeadException;
-import mafia.server.runnables.MafiaVoteGetterRunnable;
+import mafia.server.runnables.voting.MafiaVoteGetterRunnable;
 import mafia.server.state.GameState;
 import mafia.server.workers.PlayerWorker;
 

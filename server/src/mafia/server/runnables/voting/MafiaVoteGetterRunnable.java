@@ -1,4 +1,4 @@
-package mafia.server.runnables;
+package mafia.server.runnables.voting;
 
 import mafia.server.GameRoll.mafia.abstacts.Mafia;
 import mafia.server.workers.PlayerWorker;

@@ -27,7 +27,7 @@ public class GameLoop {
         this.startIntroductionNight();
 
         while (!GameFinisher.isGameFinished()) {
-            this.startDay();
+            this.startDay(database);
             this.startPoll();
 
             if (GameFinisher.isGameFinished()) {
@@ -46,10 +46,10 @@ public class GameLoop {
         this.manager.handleIntroductionNight();
     }
 
-    private void startDay() {
+    private void startDay(File database) {
         GameState.getSingletonInstance().goInDayMode();
         this.broadcastGameTimeChange(GameTimeEnum.DAY);
-//        this.manager.handleDay();
+        this.manager.handleDay(database);
     }
 
     private void startPoll() {

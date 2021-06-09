@@ -33,7 +33,7 @@ public abstract class GameRoll implements CanKnowItsExactRollTrait, CanParticipa
      *
      * @return the boolean
      */
-    public boolean haveSpeakPermission() {
+    public boolean canSpeak() {
         return this.speakPermission;
     }
 

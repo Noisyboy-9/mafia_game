@@ -1,7 +1,7 @@
 package mafia.server.manager.traits;
 
 import mafia.server.exceptions.PlayerIsAlreadyDeadException;
-import mafia.server.runnables.PlayerPollVoteGetterRunnable;
+import mafia.server.runnables.voting.PlayerPollVoteGetterRunnable;
 import mafia.server.state.GameState;
 import mafia.server.workers.PlayerWorker;
 
