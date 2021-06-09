@@ -23,14 +23,19 @@ public class GetUserMessageRunnable implements Runnable {
     public void run() {
         while (!Thread.currentThread().isInterrupted()) {
             try {
-                this.sendMessageToServer(this.getUserMessage());
-                Thread.sleep(10_000);
+                String userMessage = this.getUserMessage();
+
+                this.sendMessageToServer(userMessage);
+
+                if (userMessage.equalsIgnoreCase("ready")) {
+                    System.out.println("ready command received");
+                    System.out.println("Waiting for other players to ready up!");
+                    break;
+                }
             } catch (IOException ioException) {
                 System.out.println(ioException.getMessage());
                 System.out.println("Client connection to chat server lost");
                 break;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -41,7 +46,6 @@ public class GetUserMessageRunnable implements Runnable {
 
     private String getUserMessage() {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Please input your message:\t");
-        return scanner.nextLine();
+        return scanner.nextLine().trim();
     }
 }

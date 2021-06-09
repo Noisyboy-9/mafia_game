@@ -35,10 +35,12 @@ public class ClientManager {
             String command = tokens.split(" ")[0];
 
 
+            Thread chatThread = null;
             while (!command.equals("exit")) {
                 if (command.equals("getInput")) new GetInputCommand(tokens, request).handle();
                 if (command.equals("showMessage")) new ShowMessageCommand(tokens).handle();
                 if (command.equals("startChat")) new StartChatCommand(tokens, request).handle();
+                if (command.equals("closeChat")) System.out.println("chat is closed!");
                 if (command.equals("killClient")) {
                     System.out.println("you have been killed");
                     break;
@@ -46,9 +48,8 @@ public class ClientManager {
                 tokens = (String) this.response.readObject();
                 command = tokens.split(" ")[0];
             }
-        } catch (IOException | ClassNotFoundException ioException) {
-            System.out.println("something went wrong");
-            System.out.println(ioException.getMessage());
+        } catch (IOException | ClassNotFoundException exception) {
+            exception.printStackTrace();
         }
     }
 }
