@@ -41,10 +41,7 @@ public class ChatStarterRunnable implements Runnable, CanHandlePlayerDisconnect 
                     break;
                 }
 
-                synchronized (this.messages) {
-                    this.messages.add(message);
-                }
-
+                this.messages.add(message);
                 this.server.broadcast(message);
             }
         } catch (IOException | ClassNotFoundException e) {

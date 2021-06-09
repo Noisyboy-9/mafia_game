@@ -19,14 +19,13 @@ public class PlayerPollVoteGetterRunnable implements Runnable {
         GameRoll gameRoll = voterWorker.getGameRoll();
         PlayerWorker voteTarget = gameRoll.voteInPoll(this.voterWorker);
 
-        synchronized (votes) {
-            if (votes.containsKey(voteTarget)) {
-                int votesCount = votes.get(voteTarget);
-                votesCount++;
-                this.votes.put(voteTarget, votesCount);
-            } else {
-                votes.put(voteTarget, 1);
-            }
+        if (votes.containsKey(voteTarget)) {
+            int votesCount = votes.get(voteTarget);
+            votesCount++;
+            this.votes.put(voteTarget, votesCount);
+        } else {
+            votes.put(voteTarget, 1);
         }
+
     }
 }

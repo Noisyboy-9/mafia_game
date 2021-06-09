@@ -9,6 +9,7 @@ import mafia.server.workers.PlayerWorker;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -115,18 +116,18 @@ public class ChatServer implements CanHandlePlayerDisconnect {
         }
     }
 
-    private ArrayList<Message> readPreviousMessages() {
+    private List<Message> readPreviousMessages() {
         if (database.length() == 0) {
-            return new ArrayList<>();
+            return Collections.synchronizedList(new ArrayList<>());
         }
 
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(database))) {
-            return (ArrayList<Message>) objectInputStream.readObject();
+            Collections.synchronizedList((ArrayList<Message>) objectInputStream.readObject());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        return new ArrayList<>();
+        return Collections.synchronizedList(new ArrayList<>());
     }
 
     private void writeMessagesToDatabase() {
@@ -164,7 +165,7 @@ public class ChatServer implements CanHandlePlayerDisconnect {
         ExecutorService executorService = Executors.newCachedThreadPool();
 
         for (PlayerWorker user : this.users) {
-            executorService.execute(new ChatStarterRunnable(user, messages, this));
+            executorService.execute(new ChatStarterRunnable(user, this.messages, this));
         }
 
         try {

@@ -77,14 +77,14 @@ public class GameStarter {
         }
 
         this.assignRolesToPlayers();
-        this.assignIdToPlayers();
+        this.assignIdToEveryPlayer();
         this.sendRoleReportToEveryPlayer();
 
         GameLoop loop = new GameLoop();
         loop.start();
     }
 
-    private void assignIdToPlayers() {
+    private void assignIdToEveryPlayer() {
         int id = 1;
         for (PlayerWorker playerWorker : this.players) {
             playerWorker.getGameRoll().setId(id);
