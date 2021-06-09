@@ -9,6 +9,7 @@ import mafia.server.workers.PlayerWorker;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -19,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class ChatServer implements CanHandlePlayerDisconnect {
     private final File database;
     private final ArrayList<PlayerWorker> users;
-    private final ArrayList<Message> messages;
+    private final List<Message> messages;
 
     /**
      * Instantiates a new Chat server.
@@ -78,29 +79,60 @@ public class ChatServer implements CanHandlePlayerDisconnect {
      *
      * @param messages the messages
      */
-    public void broadcast(ArrayList<Message> messages) {
+    public void broadcast(List<Message> messages) {
         messages.forEach(this::broadcast);
     }
 
-    private ArrayList<Message> readPreviousMessages() {
-        ArrayList<Message> messages = new ArrayList<>();
-
+    /**
+     * Send messages to person.
+     *
+     * @param messages the messages
+     * @param user     the user
+     */
+    public void sendMessagesToPerson(List<Message> messages, PlayerWorker user) {
+        ObjectOutputStream response = user.getResponse();
         try {
-            InputStream in = new FileInputStream(database);
-            ObjectInputStream objectInputStream = new ObjectInputStream(in);
-            messages.add((Message) objectInputStream.readObject());
+            response.writeObject(new ShowMessageCommand("all messages:").toString());
+        } catch (IOException ioException) {
+            this.handlePlayerDisconnect(user);
+        }
+
+        for (Message message : messages) {
+            try {
+                response.writeObject(new ShowMessageCommand(message.toString()).toString());
+            } catch (IOException ioException) {
+                this.handlePlayerDisconnect(user);
+            }
+        }
+    }
+
+    public void closeUserChat(PlayerWorker user) {
+        ObjectOutputStream response = user.getResponse();
+        try {
+            response.writeObject(new CloseChatCommand().toString());
+        } catch (IOException ioException) {
+            this.handlePlayerDisconnect(user);
+        }
+    }
+
+    private ArrayList<Message> readPreviousMessages() {
+        if (database.length() == 0) {
+            return new ArrayList<>();
+        }
+
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(database))) {
+            return (ArrayList<Message>) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
-        return messages;
+        return new ArrayList<>();
     }
 
     private void writeMessagesToDatabase() {
         try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(this.database));
-            outputStream.writeObject(this.messages);
-            outputStream.flush();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(this.database));
+            objectOutputStream.writeObject(this.messages);
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }

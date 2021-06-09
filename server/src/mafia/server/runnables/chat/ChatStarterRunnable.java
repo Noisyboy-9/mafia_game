@@ -8,14 +8,14 @@ import mafia.server.workers.PlayerWorker;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+import java.util.List;
 
 public class ChatStarterRunnable implements Runnable, CanHandlePlayerDisconnect {
     private final PlayerWorker user;
     private final ChatServer server;
-    private final ArrayList<Message> messages;
+    private final List<Message> messages;
 
-    public ChatStarterRunnable(PlayerWorker user, ArrayList<Message> messages, ChatServer server) {
+    public ChatStarterRunnable(PlayerWorker user, List<Message> messages, ChatServer server) {
         this.user = user;
         this.messages = messages;
         this.server = server;
@@ -31,14 +31,21 @@ public class ChatStarterRunnable implements Runnable, CanHandlePlayerDisconnect 
                 String messageBody = (String) request.readObject();
                 Message message = new Message(this.user, messageBody);
 
-                if (message.getBody().equals("History")) {
-                    this.server.broadcast(this.messages);
+                if (message.getBody().equalsIgnoreCase("history")) {
+                    this.server.sendMessagesToPerson(this.messages, this.user);
+                    continue;
+                }
+
+                if (message.getBody().equalsIgnoreCase("ready")) {
+                    this.server.closeUserChat(user);
+                    break;
                 }
 
                 synchronized (this.messages) {
                     this.messages.add(message);
-                    this.server.broadcast(message);
                 }
+
+                this.server.broadcast(message);
             }
         } catch (IOException | ClassNotFoundException e) {
             this.handlePlayerDisconnect(this.user);

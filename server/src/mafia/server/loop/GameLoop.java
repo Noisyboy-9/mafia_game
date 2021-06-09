@@ -65,16 +65,7 @@ public class GameLoop {
     }
 
     private File createChatDatabaseFile() {
-        File database = new File("src/mafia/server/database/chat.database.binary");
-        if (!database.exists()) {
-            try {
-                database.createNewFile();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        }
-
-        return database;
+        return new File("src/mafia/server/database/chat.database.binary");
     }
 
     private void broadcastGameTimeChange(GameTimeEnum newTime) {
@@ -84,7 +75,7 @@ public class GameLoop {
             String message;
 
             if (newTime.equals(GameTimeEnum.DAY)) {
-                message = "Starting Day";
+                message = "Starting Day\nWhen ever you want to chat just type and hit enter\nIf you are ready type 'ready'";
             } else if (newTime.equals(GameTimeEnum.NIGHT)) {
                 message = "Starting Night";
             } else if (newTime.equals(GameTimeEnum.INTRODUCTION_NIGHT)) {

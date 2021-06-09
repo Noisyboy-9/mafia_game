@@ -13,8 +13,8 @@ import mafia.server.workers.PlayerWorker;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -151,13 +151,13 @@ public interface CanHandleNightTrait extends CanHandlePlayerDisconnect {
     }
 
     private PlayerWorker handleMafiaCitizenKill() throws PlayerIsAlreadyDeadException {
-        HashMap<PlayerWorker, PlayerWorker> votes = this.getBottomMafiasKillTargetVote();
+        ConcurrentHashMap<PlayerWorker, PlayerWorker> votes = this.getBottomMafiasKillTargetVote();
         PlayerWorker mafiaKillTarget = this.getMafiaLeaderKillTarget(votes);
         mafiaKillTarget.getGameRoll().kill();
         return mafiaKillTarget;
     }
 
-    private PlayerWorker getMafiaLeaderKillTarget(HashMap<PlayerWorker, PlayerWorker> votes) {
+    private PlayerWorker getMafiaLeaderKillTarget(ConcurrentHashMap<PlayerWorker, PlayerWorker> votes) {
         PlayerWorker mafiaLeaderWorker = GameState.getSingletonInstance().getMafiaLeader();
         Mafia mafiaLeader = (Mafia) Objects.requireNonNull(mafiaLeaderWorker).getGameRoll();
 
@@ -180,9 +180,9 @@ public interface CanHandleNightTrait extends CanHandlePlayerDisconnect {
         return killTarget;
     }
 
-    private HashMap<PlayerWorker, PlayerWorker> getBottomMafiasKillTargetVote() {
+    private ConcurrentHashMap<PlayerWorker, PlayerWorker> getBottomMafiasKillTargetVote() {
         ArrayList<PlayerWorker> mafias = GameState.getSingletonInstance().getAliveMafias();
-        HashMap<PlayerWorker, PlayerWorker> votes = new HashMap<>();
+        ConcurrentHashMap<PlayerWorker, PlayerWorker> votes = new ConcurrentHashMap<>();
 
 
         ExecutorService executor = null;

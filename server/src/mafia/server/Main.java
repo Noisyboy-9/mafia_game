@@ -23,11 +23,7 @@ public class Main {
                 waitForPlayerToJoin(serverSocket, startManager);
             }
 
-//            if (startManager.serverAdminWantsPreviousGameLoad()) {
-//                startManager.loadPreviousGame();
-//            } else {
             startManager.startNewGame();
-//            }
         } catch (IOException | ClassNotFoundException | NotEnoughPlayerException | InvalidMaxPlayerCountException exception) {
             exception.printStackTrace();
         }

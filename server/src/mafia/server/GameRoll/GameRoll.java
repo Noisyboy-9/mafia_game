@@ -7,7 +7,7 @@ import mafia.server.GameRoll.traits.CanParticipateInPollTrait;
  * The abstract type player in mafia game.
  */
 public abstract class GameRoll implements CanKnowItsExactRollTrait, CanParticipateInPollTrait {
-    private boolean speakPermission;
+    private boolean speakPermission = true;
     private int id;
     private boolean isKilled;
     private boolean isServerAdmin;
