@@ -25,9 +25,9 @@ The game has two main category of roles:
 
 The game supports these roles in the mafia group:
 
-- God Father : leader of the mafias
-- Doctor Lector : The medical assistant of the Mafias
-- Normal Mafia : without any special ability
+- God Father 
+- Doctor Lector 
+- Normal Mafia 
 
 ### citizens
 
