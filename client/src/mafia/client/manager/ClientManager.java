@@ -2,11 +2,12 @@ package mafia.client.manager;
 
 import mafia.client.command.GetInputCommand;
 import mafia.client.command.ShowMessageCommand;
-import mafia.client.command.StartChatCommand;
+import mafia.client.command.clientChatManagerCommand;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Objects;
 
 /**
  * The type Client manager.
@@ -35,16 +36,30 @@ public class ClientManager {
             String command = tokens.split(" ")[0];
 
 
-            Thread chatThread = null;
+            clientChatManagerCommand chatManager = null;
             while (!command.equals("exit")) {
-                if (command.equals("getInput")) new GetInputCommand(tokens, request).handle();
-                if (command.equals("showMessage")) new ShowMessageCommand(tokens).handle();
-                if (command.equals("startChat")) new StartChatCommand(tokens, request).handle();
-                if (command.equals("closeChat")) System.out.println("chat is closed!");
+                if (command.equals("getInput")) {
+                    new GetInputCommand(tokens, request).handle();
+                }
+
+                if (command.equals("showMessage")) {
+                    new ShowMessageCommand(tokens).handle();
+                }
+
+                if (command.equals("startChat")) {
+                    chatManager = new clientChatManagerCommand(tokens, request);
+                    chatManager.handle();
+                }
+
+                if (command.equals("closeChat")) {
+                    Objects.requireNonNull(chatManager).close();
+                }
+
                 if (command.equals("killClient")) {
                     System.out.println("you have been killed");
                     break;
                 }
+
                 tokens = (String) this.response.readObject();
                 command = tokens.split(" ")[0];
             }
