@@ -13,6 +13,7 @@ public class CityDoctor extends Citizen implements CanSeeAllPlayersTrait, CanSel
      * Select player to cure.
      *
      * @param cityDoctor the city doctor
+     * @return the player worker
      */
     public PlayerWorker selectPlayerToCure(PlayerWorker cityDoctor) {
         this.showAllPlayersToClient(cityDoctor);

@@ -10,11 +10,21 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
+/**
+ * The type Chat starter runnable.
+ */
 public class ChatStarterRunnable implements Runnable, CanHandlePlayerDisconnect {
     private final PlayerWorker user;
     private final ChatServer server;
     private final List<Message> messages;
 
+    /**
+     * Instantiates a new Chat starter runnable.
+     *
+     * @param user     the user
+     * @param messages the messages
+     * @param server   the server
+     */
     public ChatStarterRunnable(PlayerWorker user, List<Message> messages, ChatServer server) {
         this.user = user;
         this.messages = messages;

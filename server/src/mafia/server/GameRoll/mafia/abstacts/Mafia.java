@@ -45,7 +45,8 @@ public abstract class Mafia extends GameRoll implements CanVoteForKillTargetTrai
      *
      * @param leaderWorker the leader worker
      * @return the player worker
-     * @throws IOException the io exception
+     * @throws IOException                           the io exception
+     * @throws BottomMafiaCanNotKillCitizenException the bottom mafia can not kill citizen exception
      */
     public PlayerWorker selectCitizenToKill(PlayerWorker leaderWorker) throws IOException, BottomMafiaCanNotKillCitizenException {
         Mafia leader = (Mafia) leaderWorker.getGameRoll();

@@ -22,6 +22,11 @@ public class GameState {
     private GameState() {
     }
 
+    /**
+     * Gets alive players.
+     *
+     * @return the alive players
+     */
     public ArrayList<PlayerWorker> getAlivePlayers() {
         return this.playerWorkerManager.getAlivePlayers();
     }

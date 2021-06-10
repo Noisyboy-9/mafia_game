@@ -1,7 +1,6 @@
 package mafia.server.GameRoll.mafia;
 
 import mafia.server.GameRoll.mafia.abstacts.Mafia;
-import mafia.server.state.GameState;
 
 /**
  * The role God Father in mafia game

@@ -46,6 +46,7 @@ public class Sniper extends Citizen implements CanSeeAllPlayersTrait, CanSelectP
      * Shoot player.
      *
      * @param sniper the sniper
+     * @return the player worker
      */
     public PlayerWorker shootPlayer(PlayerWorker sniper) {
         this.showAllPlayersToClient(sniper);

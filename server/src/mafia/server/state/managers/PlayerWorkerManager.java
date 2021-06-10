@@ -11,20 +11,36 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * The type Player worker manager.
+ */
 public class PlayerWorkerManager {
     private final ArrayList<PlayerWorker> alivePlayers;
     private final ArrayList<PlayerWorker> deadPlayers;
 
 
+    /**
+     * Instantiates a new Player worker manager.
+     */
     public PlayerWorkerManager() {
         this.alivePlayers = new ArrayList<>();
         this.deadPlayers = new ArrayList<>();
     }
 
+    /**
+     * Gets alive players.
+     *
+     * @return the alive players
+     */
     public ArrayList<PlayerWorker> getAlivePlayers() {
         return alivePlayers;
     }
 
+    /**
+     * Gets dead players.
+     *
+     * @return the dead players
+     */
     public ArrayList<PlayerWorker> getDeadPlayers() {
         return deadPlayers;
     }

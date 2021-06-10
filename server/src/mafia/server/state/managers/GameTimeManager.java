@@ -2,9 +2,18 @@ package mafia.server.state.managers;
 
 import mafia.server.enums.GameTimeEnum;
 
+/**
+ * The type Game time manager.
+ */
 public class GameTimeManager {
+    /**
+     * The Game time enum.
+     */
     public GameTimeEnum gameTimeEnum;
 
+    /**
+     * Instantiates a new Game time manager.
+     */
     public GameTimeManager() {
     }
 

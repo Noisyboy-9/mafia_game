@@ -10,9 +10,17 @@ import mafia.server.workers.PlayerWorker;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The type Game manager.
+ */
 public class GameManager implements CanHandleNightTrait,
         CanHandleIntroductionNightTrait,
         CanHandlePollTrait {
+    /**
+     * Handle day.
+     *
+     * @param database the database
+     */
     public void handleDay(File database) {
         ChatServer chatServer = new ChatServer(database);
 

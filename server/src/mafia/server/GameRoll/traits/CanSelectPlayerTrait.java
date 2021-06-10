@@ -44,6 +44,11 @@ public interface CanSelectPlayerTrait extends CanHandlePlayerDisconnect {
         return GameState.getSingletonInstance().getPlayerWorkerByUsername(votedForUsername);
     }
 
+    /**
+     * Send vote received notification.
+     *
+     * @param playerWorker the player worker
+     */
     default void sendVoteReceivedNotification(PlayerWorker playerWorker) {
         ObjectOutputStream response = playerWorker.getResponse();
         try {

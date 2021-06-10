@@ -5,10 +5,19 @@ import mafia.server.workers.PlayerWorker;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * The type Mafia vote getter runnable.
+ */
 public class MafiaVoteGetterRunnable implements Runnable {
     private final PlayerWorker mafiaWorker;
     private final ConcurrentHashMap<PlayerWorker, PlayerWorker> votes;
 
+    /**
+     * Instantiates a new Mafia vote getter runnable.
+     *
+     * @param mafiaWorker the mafia worker
+     * @param votes       the votes
+     */
     public MafiaVoteGetterRunnable(PlayerWorker mafiaWorker, ConcurrentHashMap<PlayerWorker, PlayerWorker> votes) {
         this.mafiaWorker = mafiaWorker;
         this.votes = votes;

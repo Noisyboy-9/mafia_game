@@ -6,10 +6,19 @@ import mafia.server.workers.PlayerWorker;
 
 import java.util.HashMap;
 
+/**
+ * The type Player poll vote getter runnable.
+ */
 public class PlayerPollVoteGetterRunnable implements Runnable, CanHandlePlayerDisconnect {
     private final PlayerWorker voterWorker;
     private final HashMap<PlayerWorker, Integer> votes;
 
+    /**
+     * Instantiates a new Player poll vote getter runnable.
+     *
+     * @param voterWorker the voter worker
+     * @param votes       the votes
+     */
     public PlayerPollVoteGetterRunnable(PlayerWorker voterWorker, HashMap<PlayerWorker, Integer> votes) {
         this.voterWorker = voterWorker;
         this.votes = votes;

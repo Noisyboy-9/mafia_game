@@ -76,15 +76,6 @@ public class ChatServer implements CanHandlePlayerDisconnect {
     }
 
     /**
-     * Broadcast A list of messages.
-     *
-     * @param messages the messages
-     */
-    public void broadcast(List<Message> messages) {
-        messages.forEach(this::broadcast);
-    }
-
-    /**
      * Send messages to person.
      *
      * @param messages the messages
@@ -107,6 +98,11 @@ public class ChatServer implements CanHandlePlayerDisconnect {
         }
     }
 
+    /**
+     * Close user chat.
+     *
+     * @param user the user
+     */
     public void closeUserChat(PlayerWorker user) {
         ObjectOutputStream response = user.getResponse();
         try {
@@ -131,8 +127,7 @@ public class ChatServer implements CanHandlePlayerDisconnect {
     }
 
     private void writeMessagesToDatabase() {
-        ArrayList<Message> allMessages = new ArrayList<>();
-        allMessages.addAll(this.messages);
+        ArrayList<Message> allMessages = new ArrayList<>(this.messages);
 
         try {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(this.database));

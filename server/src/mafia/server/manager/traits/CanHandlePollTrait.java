@@ -13,7 +13,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The interface Can handle poll trait.
+ */
 public interface CanHandlePollTrait extends CanHandlePlayerDisconnect {
+    /**
+     * Handle poll.
+     */
     default void handlePoll() {
         ArrayList<PlayerWorker> players = GameState.getSingletonInstance().getAlivePlayers();
         HashMap<PlayerWorker, Integer> votes = this.getPlayersVotes(players);

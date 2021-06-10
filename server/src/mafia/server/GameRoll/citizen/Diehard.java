@@ -60,6 +60,13 @@ public class Diehard extends Citizen {
         return GameState.getSingletonInstance().gameReportString();
     }
 
+    /**
+     * Send game report string.
+     *
+     * @param diehard the diehard
+     * @param report  the report
+     * @throws IOException the io exception
+     */
     public void sendGameReportString(PlayerWorker diehard, String report) throws IOException {
         ObjectOutputStream response = diehard.getResponse();
         response.writeObject(new ShowMessageCommand(report).toString());

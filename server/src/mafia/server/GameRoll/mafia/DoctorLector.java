@@ -13,6 +13,7 @@ public class DoctorLector extends Mafia implements CanSeeAllMafiasTrait, CanSele
      * Select mafia to cure.
      *
      * @param doctorLector the doctor lector
+     * @return the player worker
      */
     public PlayerWorker selectMafiaToCure(PlayerWorker doctorLector) {
         this.showAllMafiasToClient(doctorLector);
