@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Objects;
+import java.util.Scanner;
 
 /**
  * The type Client manager.
@@ -56,8 +57,9 @@ public class ClientManager {
                 }
 
                 if (command.equals("killClient")) {
-                    System.out.println("you have been killed");
-                    break;
+                    if (!this.clientWantsToGoInSpectatorMode()) {
+                        break;
+                    }
                 }
 
                 tokens = (String) this.response.readObject();
@@ -66,5 +68,13 @@ public class ClientManager {
         } catch (IOException | ClassNotFoundException exception) {
             exception.printStackTrace();
         }
+    }
+
+    private boolean clientWantsToGoInSpectatorMode() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Want to go in spectator mode(Y for yes, N for no): ");
+        String input = scanner.nextLine();
+
+        return input.equalsIgnoreCase("y");
     }
 }
