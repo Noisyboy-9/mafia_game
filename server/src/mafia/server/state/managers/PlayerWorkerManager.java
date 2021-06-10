@@ -140,7 +140,6 @@ public class PlayerWorkerManager {
      */
     public String aliveMafiasToString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("All Alive Mafias: \n");
 
         for (PlayerWorker playerWorker : getAliveMafias()) {
             builder.append(playerWorker);

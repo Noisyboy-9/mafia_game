@@ -56,6 +56,13 @@ public abstract class Mafia extends GameRoll implements CanVoteForKillTargetTrai
         ObjectOutputStream response = leaderWorker.getResponse();
         ObjectInputStream request = leaderWorker.getRequest();
 
+//        show the alive mafias
+        response.writeObject(new ShowMessageCommand("all alive mafias:").toString());
+        response.writeObject(new ShowMessageCommand(GameState.getSingletonInstance().aliveMafiasToString()).toString());
+        response.writeObject(new ShowMessageCommand("-----------------------------------------").toString());
+
+//        show the alive citizens and get selection
+        response.writeObject(new ShowMessageCommand("all alive citizens: ").toString());
         response.writeObject(new ShowMessageCommand(GameState.getSingletonInstance().aliveCitizensToString()).toString());
         response.writeObject(new GetInputCommand("Who do you want to kill?(please enter username) ").toString());
 

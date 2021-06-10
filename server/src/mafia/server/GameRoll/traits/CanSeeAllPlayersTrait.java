@@ -21,8 +21,14 @@ public interface CanSeeAllPlayersTrait {
         ObjectOutputStream response = playerWorker.getResponse();
 
         try {
-            response.writeObject(new ShowMessageCommand("all available players").toString());
-            response.writeObject(new ShowMessageCommand(GameState.getSingletonInstance().alivePlayersToString()).toString());
+//            show all alive mafias
+            response.writeObject(new ShowMessageCommand("All alive mafias:").toString());
+            response.writeObject(new ShowMessageCommand(GameState.getSingletonInstance().aliveMafiasToString()).toString());
+            response.writeObject(new ShowMessageCommand("-----------------------------------").toString());
+
+//            show all alive citizens
+            response.writeObject(new ShowMessageCommand("all available citizens:").toString());
+            response.writeObject(new ShowMessageCommand(GameState.getSingletonInstance().aliveCitizensToString()).toString());
             response.writeObject(new GetInputCommand("Please enter selected player username").toString());
         } catch (IOException ioException) {
             ioException.printStackTrace();
