@@ -6,10 +6,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * The type Get input command.
+ */
 public class GetInputCommand extends Command {
     private final ArrayList<String> questionWords = new ArrayList<>();
     private final ObjectOutputStream request;
 
+    /**
+     * Instantiates a new Get input command.
+     *
+     * @param commandString the command string
+     * @param request       the request
+     */
     public GetInputCommand(String commandString, ObjectOutputStream request) {
         super(commandString);
         this.request = request;
