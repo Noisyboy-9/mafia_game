@@ -1,28 +1,27 @@
 package mafia.server.ChatSystem;
 
-import mafia.server.workers.PlayerWorker;
-
 import java.io.Serializable;
 
 public class Message implements Serializable {
     private final String body;
-    private final PlayerWorker sender;
+    private final String senderUsername;
 
-    public Message(PlayerWorker sender, String body) {
+    public Message(String senderUsername, String body) {
         this.body = body;
-        this.sender = sender;
+        this.senderUsername = senderUsername;
     }
 
     @Override
     public String toString() {
-        return sender.getUsername() + " : " + body;
+        return this.senderUsername + " : " + body;
+    }
+
+    public String getSenderUsername() {
+        return senderUsername;
     }
 
     public String getBody() {
         return body;
     }
 
-    public PlayerWorker getSender() {
-        return sender;
-    }
 }

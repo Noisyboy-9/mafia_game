@@ -21,6 +21,7 @@ public interface CanSelectMafiaTrait extends CanSelectPlayerTrait, CanSeeAllPlay
             otherMafia = this.getSelectedPlayer(mafia);
         }
 
+        this.sendVoteReceivedNotification(mafia);
         return otherMafia;
     }
 }

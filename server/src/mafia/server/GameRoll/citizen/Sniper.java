@@ -38,6 +38,7 @@ public class Sniper extends Citizen implements CanSeeAllPlayersTrait, CanSelectP
             ioException.printStackTrace();
         }
 
+        this.sendVoteReceivedNotification(sniper);
         return false;
     }
 
@@ -45,7 +46,6 @@ public class Sniper extends Citizen implements CanSeeAllPlayersTrait, CanSelectP
      * Shoot player.
      *
      * @param sniper the sniper
-     * @return
      */
     public PlayerWorker shootPlayer(PlayerWorker sniper) {
         this.showAllPlayersToClient(sniper);

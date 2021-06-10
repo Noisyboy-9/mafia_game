@@ -63,7 +63,7 @@ public class ChatServer implements CanHandlePlayerDisconnect {
      */
     public void broadcast(Message message) {
         for (PlayerWorker user : this.users) {
-            if (!message.getSender().equals(user)) {
+            if (!message.getSenderUsername().equals(user.getUsername())) {
 //                don't sent the sender's message again to himself
                 ObjectOutputStream response = user.getResponse();
                 try {
@@ -122,7 +122,7 @@ public class ChatServer implements CanHandlePlayerDisconnect {
         }
 
         try (ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(database))) {
-            Collections.synchronizedList((ArrayList<Message>) objectInputStream.readObject());
+            return Collections.synchronizedList((List<Message>) objectInputStream.readObject());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -131,9 +131,12 @@ public class ChatServer implements CanHandlePlayerDisconnect {
     }
 
     private void writeMessagesToDatabase() {
+        ArrayList<Message> allMessages = new ArrayList<>();
+        allMessages.addAll(this.messages);
+
         try {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(this.database));
-            objectOutputStream.writeObject(this.messages);
+            objectOutputStream.writeObject(allMessages);
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }

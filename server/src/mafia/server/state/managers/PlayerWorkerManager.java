@@ -35,8 +35,10 @@ public class PlayerWorkerManager {
      * @return the array list
      */
     public ArrayList<PlayerWorker> getAllGamePlayers() {
-        alivePlayers.addAll(deadPlayers);
-        return alivePlayers;
+        ArrayList<PlayerWorker> allGamePlayers = new ArrayList<>();
+        allGamePlayers.addAll(deadPlayers);
+        allGamePlayers.addAll(alivePlayers);
+        return allGamePlayers;
     }
 
     /**

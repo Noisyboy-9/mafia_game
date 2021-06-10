@@ -47,7 +47,7 @@ public interface CanSelectPlayerTrait extends CanHandlePlayerDisconnect {
     default void sendVoteReceivedNotification(PlayerWorker playerWorker) {
         ObjectOutputStream response = playerWorker.getResponse();
         try {
-            response.writeObject(new ShowMessageCommand("vote received").toString());
+            response.writeObject(new ShowMessageCommand("Selection Received").toString());
         } catch (IOException ioException) {
             this.handlePlayerDisconnect(playerWorker);
         }

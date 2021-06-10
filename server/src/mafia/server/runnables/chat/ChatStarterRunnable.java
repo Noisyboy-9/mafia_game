@@ -29,7 +29,7 @@ public class ChatStarterRunnable implements Runnable, CanHandlePlayerDisconnect 
         try {
             while (true) {
                 String messageBody = (String) request.readObject();
-                Message message = new Message(this.user, messageBody);
+                Message message = new Message(this.user.getUsername(), messageBody);
 
                 if (message.getBody().equalsIgnoreCase("history")) {
                     this.server.sendMessagesToPerson(this.messages, this.user);

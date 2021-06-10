@@ -77,7 +77,6 @@ public abstract class Mafia extends GameRoll implements CanVoteForKillTargetTrai
             response.writeObject(new ShowMessageCommand("Mafia can't kill another mafia").toString());
             response.writeObject(new ShowMessageCommand(GameState.getSingletonInstance().aliveCitizensToString()).toString());
             response.writeObject(new GetInputCommand("Who do you want to kill?(please enter username) ").toString());
-
             try {
                 username = (String) request.readObject();
             } catch (ClassNotFoundException e) {
@@ -85,6 +84,7 @@ public abstract class Mafia extends GameRoll implements CanVoteForKillTargetTrai
             }
         }
 
+        this.sendVoteReceivedNotification(leaderWorker);
         return GameState.getSingletonInstance().getPlayerWorkerByUsername(username);
     }
 
