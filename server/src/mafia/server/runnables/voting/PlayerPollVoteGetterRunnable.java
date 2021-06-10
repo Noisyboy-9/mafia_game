@@ -1,11 +1,12 @@
 package mafia.server.runnables.voting;
 
 import mafia.server.GameRoll.GameRoll;
+import mafia.server.manager.traits.CanHandlePlayerDisconnect;
 import mafia.server.workers.PlayerWorker;
 
 import java.util.HashMap;
 
-public class PlayerPollVoteGetterRunnable implements Runnable {
+public class PlayerPollVoteGetterRunnable implements Runnable, CanHandlePlayerDisconnect {
     private final PlayerWorker voterWorker;
     private final HashMap<PlayerWorker, Integer> votes;
 
@@ -27,5 +28,6 @@ public class PlayerPollVoteGetterRunnable implements Runnable {
             votes.put(voteTarget, 1);
         }
 
+        this.broadcastMessageToAll(voterWorker.getUsername() + " has voted for: " + voteTarget.getUsername());
     }
 }
