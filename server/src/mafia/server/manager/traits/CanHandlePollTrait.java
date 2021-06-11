@@ -1,5 +1,6 @@
 package mafia.server.manager.traits;
 
+import mafia.server.GameRoll.citizen.Mayor;
 import mafia.server.exceptions.PlayerIsAlreadyDeadException;
 import mafia.server.runnables.voting.PlayerPollVoteGetterRunnable;
 import mafia.server.state.GameState;
@@ -24,6 +25,10 @@ public interface CanHandlePollTrait extends CanHandlePlayerDisconnect {
         ArrayList<PlayerWorker> players = GameState.getSingletonInstance().getAlivePlayers();
         HashMap<PlayerWorker, Integer> votes = this.getPlayersVotes(players);
 
+        if (this.mayorWantsPollCancellation()) {
+            return;
+        }
+
         Map.Entry<PlayerWorker, Integer> highestVote = null;
 
         for (Map.Entry<PlayerWorker, Integer> vote : votes.entrySet()) {
@@ -41,6 +46,12 @@ public interface CanHandlePollTrait extends CanHandlePlayerDisconnect {
         }
 
         this.broadcastMessageToAll("In the votes " + votesKillTarget.getUsername() + " was killed!");
+    }
+
+    private boolean mayorWantsPollCancellation() {
+        PlayerWorker mayorWorker = GameState.getSingletonInstance().getMayor();
+        Mayor mayor = (Mayor) mayorWorker.getGameRoll();
+        return mayor.askForPollCancellation(mayorWorker);
     }
 
     private HashMap<PlayerWorker, Integer> getPlayersVotes(ArrayList<PlayerWorker> players) {
