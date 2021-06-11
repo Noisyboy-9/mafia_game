@@ -33,7 +33,7 @@ public interface CanSelectPlayerTrait extends CanHandlePlayerDisconnect {
 //            player can't vote for himself
             ObjectOutputStream response = playerWorker.getResponse();
             try {
-                response.writeObject(new ShowMessageCommand("You can't vote for yourself!"));
+                response.writeObject(new ShowMessageCommand("You can't vote for yourself!").toString());
                 response.writeObject(new GetInputCommand("Please input Again"));
                 votedForUsername = (String) request.readObject();
             } catch (IOException ioException) {

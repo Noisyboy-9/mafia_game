@@ -11,7 +11,7 @@ import java.io.ObjectOutputStream;
 /**
  * The interface Can vote for kill target trait.
  */
-public interface CanVoteForKillTargetTrait extends CanSeeAllPlayersTrait, CanSelectPlayerTrait {
+public interface CanVoteForKillTargetTrait extends CanSeeAllMafiasTrait, CanSeeAllPlayersTrait, CanSelectPlayerTrait {
     /**
      * Vote for citizen to kill player worker.
      *
@@ -19,7 +19,9 @@ public interface CanVoteForKillTargetTrait extends CanSeeAllPlayersTrait, CanSel
      * @return the player worker
      */
     default PlayerWorker voteForCitizenToKill(PlayerWorker mafiaWorker) {
+        this.showAllMafiasToClient(mafiaWorker);
         this.showAllPlayersToClient(mafiaWorker);
+
         PlayerWorker killTarget = this.getSelectedPlayer(mafiaWorker);
         ObjectOutputStream response = mafiaWorker.getResponse();
         ObjectInputStream request = mafiaWorker.getRequest();

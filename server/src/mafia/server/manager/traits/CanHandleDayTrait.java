@@ -7,6 +7,9 @@ import mafia.server.workers.PlayerWorker;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The interface Can handle day trait.
+ */
 public interface CanHandleDayTrait {
     /**
      * Handle day.
