@@ -5,6 +5,7 @@ import mafia.server.state.GameState;
 import mafia.server.workers.PlayerWorker;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
@@ -21,10 +22,13 @@ public interface CanVoteForKillTargetTrait extends CanSeeAllPlayersTrait, CanSel
         this.showAllPlayersToClient(mafiaWorker);
         PlayerWorker killTarget = this.getSelectedPlayer(mafiaWorker);
         ObjectOutputStream response = mafiaWorker.getResponse();
+        ObjectInputStream request = mafiaWorker.getRequest();
 
         while (mafiaWorker.equals(killTarget)) {
             try {
-                response.writeObject(new ShowMessageCommand("Mafia can't kill mafia").toString());
+                response.writeObject(new ShowMessageCommand("Mafia can't kill mafia.").toString());
+                response.writeObject(new ShowMessageCommand("Please input again.").toString());
+                killTarget = this.getSelectedPlayer(mafiaWorker);
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }

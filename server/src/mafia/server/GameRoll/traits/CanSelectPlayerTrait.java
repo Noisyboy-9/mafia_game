@@ -29,14 +29,30 @@ public interface CanSelectPlayerTrait extends CanHandlePlayerDisconnect {
             this.handlePlayerDisconnect(playerWorker);
         }
 
+        while (playerWorker.getUsername().equals(votedForUsername)) {
+//            player can't vote for himself
+            ObjectOutputStream response = playerWorker.getResponse();
+            try {
+                response.writeObject(new ShowMessageCommand("You can't vote for yourself!"));
+                response.writeObject(new GetInputCommand("Please input Again"));
+                votedForUsername = (String) request.readObject();
+            } catch (IOException ioException) {
+                this.handlePlayerDisconnect(playerWorker);
+            } catch (ClassNotFoundException exception) {
+                exception.printStackTrace();
+            }
+        }
+
         while (!GameState.getSingletonInstance().playerWithUsernameExist(votedForUsername)) {
             ObjectOutputStream response = playerWorker.getResponse();
             try {
                 response.writeObject(new ShowMessageCommand("User not found").toString());
                 response.writeObject(new GetInputCommand("Please Input Again").toString());
                 votedForUsername = (String) request.readObject();
-            } catch (IOException | ClassNotFoundException ioException) {
+            } catch (IOException ioException) {
                 this.handlePlayerDisconnect(playerWorker);
+            } catch (ClassNotFoundException exception) {
+                exception.printStackTrace();
             }
         }
 
